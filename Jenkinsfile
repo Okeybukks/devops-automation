@@ -7,6 +7,7 @@ pipeline{
         stage("Run Application Test"){
             steps{
                 echo 'Run application test'
+                echo 'Testing webhook'
             }
         }
         stage("Build Application Image"){
@@ -43,7 +44,7 @@ pipeline{
             steps{
                 echo "This is the terraform destroy job"
             }
-            
+
         }
     }
 }
