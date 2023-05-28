@@ -7,7 +7,7 @@ pipeline{
         stage("Run Application Test"){
             steps{
                 echo 'Run application test'
-                echo 'Testing webhook'
+                echo 'Testing webhoo'
             }
         }
         stage("Build Application Image"){
