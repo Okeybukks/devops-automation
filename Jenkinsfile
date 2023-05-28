@@ -43,6 +43,7 @@ pipeline{
             steps{
                 echo "This is the terraform destroy job"
             }
+            
         }
     }
 }
