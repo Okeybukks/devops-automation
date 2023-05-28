@@ -4,9 +4,7 @@ pipeline{
     stages{
         stage("Build Application Image"){
             steps{
-                sh '''
-                    echo "Build stage for application"
-                '''
+                sh "echo 'Build stage for application'"
             }
         }
     }
