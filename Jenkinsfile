@@ -8,7 +8,7 @@ pipeline{
             steps{
 
                 echo 'Run application test'
-                echo 'Testing webhook'
+                echo 'Testing webhook from vscode'
             }
         }
         stage("Build Application Image"){
