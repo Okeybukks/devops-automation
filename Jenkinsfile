@@ -12,7 +12,7 @@ pipeline{
 
                 echo 'Run application test'
                 echo 'Testing webhook from vscode'
-                echo $GIT_BRANCH
+                echo "$GIT_BRANCH"
             }
         }
         stage("Login to Dockerhub"){
