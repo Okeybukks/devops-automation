@@ -3,12 +3,20 @@ pipeline{
     triggers {
         githubPush()
     }
+    environment{
+        DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
+    }
     stages{
         stage("Run Application Test"){
             steps{
 
                 echo 'Run application test'
                 echo 'Testing webhook from vscode'
+            }
+        }
+        stage("Login to Dockerhub"){
+            steps{
+                sh "echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin"
             }
         }
         stage("Build Application Image"){
