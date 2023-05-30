@@ -8,6 +8,9 @@ pipeline{
     }
     stages{
         stage("Run Application Test"){
+            when {
+                branch "main"
+            }
             steps{
 
                 echo 'Run application test'
