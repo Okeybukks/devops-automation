@@ -20,12 +20,15 @@ pipeline{
             }
         }
         stage("Build and Push Application Image"){
+            when {
+                branch "origin/test"
+            }
             steps{
                 // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
                 // sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
                 // sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
                 // sh "docker push achebeh/conduit-app:latest"
-                echo "$GIT_BRANCH"
+                echo "Hello!"
             }
         }
         stage("Staging Plan for Infrastructures Job"){
