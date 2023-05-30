@@ -19,9 +19,13 @@ pipeline{
                 sh "echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin"
             }
         }
-        stage("Build Application Image"){
+        stage("Build and Push Application Image"){
             steps{
-                echo "This is the test stage for building and pushing Image"
+                // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
+                // sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
+                // sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
+                // sh "docker push achebeh/conduit-app:latest"
+                echo "$GIT_BRANCH"
             }
         }
         stage("Staging Plan for Infrastructures Job"){
