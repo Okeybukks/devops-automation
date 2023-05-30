@@ -8,11 +8,6 @@ pipeline{
     }
     stages{
         stage("Run Application Test"){
-            when {
-                expression {
-                    return "$GIT_BRANCH == 'main'";
-                 }
-            }
             steps{
 
                 echo 'Run application test'
@@ -27,7 +22,9 @@ pipeline{
         }
         stage("Build and Push Application Image"){
             when {
-                branch "origin/main"
+                expression {
+                    return "$GIT_BRANCH == 'main'";
+                 }
             }
             steps{
                 sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
