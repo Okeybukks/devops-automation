@@ -9,7 +9,7 @@ pipeline{
     stages{
         stage("Run Application Test"){
             when {
-                branch "main"
+                branch "master"
             }
             steps{
 
