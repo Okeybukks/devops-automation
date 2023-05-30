@@ -21,14 +21,13 @@ pipeline{
         }
         stage("Build and Push Application Image"){
             when {
-                branch "origin/test"
+                branch "origin/main"
             }
             steps{
-                // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
-                // sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
-                // sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
-                // sh "docker push achebeh/conduit-app:latest"
-                echo "Hello!"
+                sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
+                sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
+                sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
+                sh "docker push achebeh/conduit-app:latest"
             }
         }
         stage("Staging Plan for Infrastructures Job"){
