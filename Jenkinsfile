@@ -9,7 +9,9 @@ pipeline{
     stages{
         stage("Run Application Test"){
             when {
-                branch "master"
+                expression {
+                    return env.BRANCH_NAME == 'main';
+                 }
             }
             steps{
 
