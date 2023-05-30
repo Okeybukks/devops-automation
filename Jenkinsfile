@@ -10,7 +10,7 @@ pipeline{
         stage("Run Application Test"){
             when {
                 expression {
-                    return env.BRANCH_NAME == 'main';
+                    return $GIT_BRANCH == 'main';
                  }
             }
             steps{
