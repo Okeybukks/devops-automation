@@ -28,7 +28,7 @@ pipeline{
                  }
             }
             steps{
-                sh "docker-compose up -d"
+                sh "docker compose up -d"
                 // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
                 // sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
                 // sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
