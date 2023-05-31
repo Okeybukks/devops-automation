@@ -28,11 +28,18 @@ pipeline{
                  }
             }
             steps{
-                env.DB_USER = credentials("DB_USER")
-                env.DB_NAME = credentials("DB_NAME")
-                env.DB_PASSWORD = credentials("DB_PASSWORD")
-                env.DB_PORT = credentials("DB_PORT")
-                env.DJANGO_SECRET_KEY("DJANGO_SECRET_KEY")
+                withCredentials([
+                    string(credentialsId: 'DJANGO_SECRET_KEY', variable: 'DJANGO_SECRET_KEY'),
+                    string(credentialsId: 'DB_NAME', variable: "DB_NAME"),
+                    string(credentialsId: 'DB_USER', variable: "DB_USER"),
+                    string(credentialsId: 'DB_PASSWORD', variable: "DB_PASSWORD"),
+                    string(credentialsId: 'DB_PORT', variable: "DB_PORT")
+                ])
+                env.DB_USER = "${DB_USER}"
+                env.DB_NAME = "${DB_NAME}"
+                env.DB_PASSWORD = "${DB_PASSWORD}"
+                env.DB_PORT = "${DB_PORT}"
+                env.DJANGO_SECRET_KEY = "${DJANGO_SECRET_KEY}"
                 sh "docker compose up -d"
                 // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
                 // sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
