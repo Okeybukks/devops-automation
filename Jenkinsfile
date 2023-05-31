@@ -5,6 +5,7 @@ pipeline{
     }
     environment{
         DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
+
     }
     stages{
         stage("Run Application Test"){
@@ -27,10 +28,11 @@ pipeline{
                  }
             }
             steps{
-                sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
-                sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
-                sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
-                sh "docker push achebeh/conduit-app:latest"
+                sh "docker-compose up -d"
+                // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
+                // sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
+                // sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
+                // sh "docker push achebeh/conduit-app:latest"
             }
         }
         stage("Staging Plan for Infrastructures Job"){
