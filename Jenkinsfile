@@ -40,9 +40,11 @@ pipeline{
                     env.DB_PASSWORD = "${DB_PASSWORD}"
                     env.DB_PORT = "${DB_PORT}"
                     env.DJANGO_SECRET_KEY = "${DJANGO_SECRET_KEY}"
+
+                    sh "echo ${DB_USER}"
                 }
                 
-                sh "docker compose up -d"
+                // sh "docker compose up -d"
                 // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
                 // sh "docker push achebeh/conduit-app:$BUILD_NUMBER"
                 // sh "docker tag achebeh/conduit-app:$BUILD_NUMBER achebeh/conduit-app:latest"
