@@ -35,11 +35,11 @@ pipeline{
                     string(credentialsId: 'DB_PASSWORD', variable: "DB_PASSWORD"),
                     string(credentialsId: 'DB_PORT', variable: "DB_PORT")
                 ]){
-                    env.DB_USER = "${DB_USER}"
-                    env.DB_NAME = "${DB_NAME}"
-                    env.DB_PASSWORD = "${DB_PASSWORD}"
-                    env.DB_PORT = "${DB_PORT}"
-                    env.DJANGO_SECRET_KEY = "${DJANGO_SECRET_KEY}"
+                    // env.DB_USER = "${DB_USER}"
+                    // env.DB_NAME = "${DB_NAME}"
+                    // env.DB_PASSWORD = "${DB_PASSWORD}"
+                    // env.DB_PORT = "${DB_PORT}"
+                    // env.DJANGO_SECRET_KEY = "${DJANGO_SECRET_KEY}"
 
                     sh "echo ${DB_USER}"
                 }
