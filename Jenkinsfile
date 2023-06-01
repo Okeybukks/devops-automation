@@ -46,10 +46,12 @@ pipeline{
                     writeFile file: envFilePath, text: envFileContent
 
                     echo "Environment file content:\n${envFileContent}"
+                    sh "cat temp_env.list"
 
-                    sh "docker compose --env-file ${envFilePath} up -d"
 
-                    sh "rm ${envFilePath}"
+                    // sh "docker compose --env-file ${envFilePath} up -d"
+
+                    // sh "rm ${envFilePath}"
 
                 }
                 // sh 'docker compose up -d'
