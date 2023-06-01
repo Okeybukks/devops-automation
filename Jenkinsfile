@@ -42,9 +42,9 @@ pipeline{
                     // env.DB_PORT = "${DB_PORT}"
                     // env.DJANGO_SECRET_KEY = "${DJANGO_SECRET_KEY}"
                     sh """
-                        env DB_USERNAME="${DB_USERNAME}" \
+                        env DB_USER="${DB_USER}" \
                         DB_PASSWORD="${DB_PASSWORD}" \
-                        SECRET_KEY="${SECRET_KEY}" \
+                        DJANGO_SECRET_KEY="${DJANGO_SECRET_KEY}" \
                         
                         docker-compose up -d
                     """
