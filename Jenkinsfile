@@ -33,7 +33,7 @@ pipeline{
                     string(credentialsId: 'DB_NAME', variable: "DB_NAME"),
                     string(credentialsId: 'DB_USER', variable: "DB_USER"),
                     string(credentialsId: 'DB_PASSWORD', variable: "DB_PASSWORD"),
-                    string(credentialsId: 'DB_PORT', variable: "DB_PORT")
+                    string(credentialsId: 'DB_PORT', variable: "DB_PORT"),
                 ]){
                     sh "docker compose up -e DB_NAME=$DB_NAME -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT=$DB_PORT"
                     // env.DB_USER = "${DB_USER}"
