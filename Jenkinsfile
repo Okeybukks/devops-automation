@@ -33,6 +33,7 @@ pipeline{
                     def dbUser = credentials("DB_USER")
                     def dbPassword = credentials("DB_PASSWORD")
                     def dbPort = credentials("DB_PORT") 
+                    def allowedHosts = credentials("ALLOWED_HOSTS")
 
                     def envFilePath = "temp_env.list"
                     def envFileContent = """
@@ -43,7 +44,8 @@ pipeline{
                         DB_PORT=$dbPort\n
                         POSTGRES_DB=$dbName\n
                         POSTGRES_USER=$dbUser\n
-                        POSTGRES_PASSWORD=$dbPassword
+                        POSTGRES_PASSWORD=$dbPassword\n
+                        ALLOWED_HOSTS=$allowedHosts
                     """
 
                     writeFile file: envFilePath, text: envFileContent
