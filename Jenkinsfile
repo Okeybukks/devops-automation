@@ -45,7 +45,7 @@ pipeline{
 
                     writeFile file: envFilePath, text: envFileContent
 
-                    sh 'cat $envFilePath'
+                    echo "Environment file content:\n${envFileContent}"
 
                 }
                 // sh 'docker compose up -d'
