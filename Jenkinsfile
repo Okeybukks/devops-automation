@@ -47,6 +47,10 @@ pipeline{
 
                     echo "Environment file content:\n${envFileContent}"
 
+                    sh "docker-compose --env-file ${envFilePath} up -d"
+
+                    sh "rm ${envFilePath}"
+
                 }
                 // sh 'docker compose up -d'
             }
