@@ -6,6 +6,10 @@ pipeline{
     environment{
         DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
         DJANGO_SECRET_KEY = credentials("DJANGO_SECRET_KEY")
+        DB_NAME = credentials("DB_NAME")
+        DB_USER = credentials("DB_USER")
+        DB_PASSWORD = credentials("DB_PASSWORD")
+        DB_PORT = credentials("DB_PORT")
     }
     stages{
         stage("Run Application Test"){
@@ -28,7 +32,7 @@ pipeline{
                  }
             }
             steps{
-                sh 'echo $DJANGO_SECRET_KEY'
+                sh 'docker compose up -e DB_NAME=$DB_NAME -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT=$DB_PORT'
                 // withCredentials([
                 //     string(credentialsId: 'DJANGO_SECRET_KEY', variable: 'DJANGO_SECRET_KEY'),
                 //     string(credentialsId: 'DB_NAME', variable: "DB_NAME"),
