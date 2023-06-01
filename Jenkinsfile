@@ -24,7 +24,8 @@ pipeline{
         stage("Build and Push Application Image"){
             when {
                 expression {
-                    return "$GIT_BRANCH == test";
+                    
+                    return "$GIT_BRANCH == test"; 
                  }
             }
             steps{
