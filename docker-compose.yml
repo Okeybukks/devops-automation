@@ -22,8 +22,9 @@ services:
     image: postgres:14.6
     networks:
       - db
-    # env_file:
-    #   - .env
+    volumes:
+      - psql_db:/var/lib/postgresql
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
@@ -35,6 +36,10 @@ services:
       retries: 3
     ports:
       - 5432:5432
+
+volumes:
+    psql_db:
+      driver: local
 
 networks:
   db:
