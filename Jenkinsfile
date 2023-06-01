@@ -5,7 +5,7 @@ pipeline{
     }
     environment{
         DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
-
+        DJANGO_SECRET_KEY = credentials("DJANGO_SECRET_KEY")
     }
     stages{
         stage("Run Application Test"){
@@ -28,6 +28,7 @@ pipeline{
                  }
             }
             steps{
+                sh 'echo $DJANGO_SECRET_KEY'
                 // withCredentials([
                 //     string(credentialsId: 'DJANGO_SECRET_KEY', variable: 'DJANGO_SECRET_KEY'),
                 //     string(credentialsId: 'DB_NAME', variable: "DB_NAME"),
