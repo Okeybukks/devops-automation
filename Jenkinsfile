@@ -17,7 +17,7 @@ pipeline{
         }
         stage("Login to Dockerhub"){
             steps{
-                sh "echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin"
+                sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
             }
         }
         stage("Build and Push Application Image"){
@@ -28,27 +28,27 @@ pipeline{
                  }
             }
             steps{
-                withCredentials([
-                    string(credentialsId: 'DJANGO_SECRET_KEY', variable: 'DJANGO_SECRET_KEY'),
-                    string(credentialsId: 'DB_NAME', variable: "DB_NAME"),
-                    string(credentialsId: 'DB_USER', variable: "DB_USER"),
-                    string(credentialsId: 'DB_PASSWORD', variable: "DB_PASSWORD"),
-                    string(credentialsId: 'DB_PORT', variable: "DB_PORT"),
-                ]){
-                    // sh "docker compose up -e DB_NAME=$DB_NAME -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT=$DB_PORT"
-                    // env.DB_USER = "${DB_USER}"
-                    // env.DB_NAME = "${DB_NAME}"
-                    // env.DB_PASSWORD = "${DB_PASSWORD}"
-                    // env.DB_PORT = "${DB_PORT}"
-                    // env.DJANGO_SECRET_KEY = "${DJANGO_SECRET_KEY}"
-                    sh """
-                        env DB_USER="$DB_USER" \
-                        DB_PASSWORD="$DB_PASSWORD" \
-                        DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" \
+                // withCredentials([
+                //     string(credentialsId: 'DJANGO_SECRET_KEY', variable: 'DJANGO_SECRET_KEY'),
+                //     string(credentialsId: 'DB_NAME', variable: "DB_NAME"),
+                //     string(credentialsId: 'DB_USER', variable: "DB_USER"),
+                //     string(credentialsId: 'DB_PASSWORD', variable: "DB_PASSWORD"),
+                //     string(credentialsId: 'DB_PORT', variable: "DB_PORT"),
+                // ]){
+                //     // sh "docker compose up -e DB_NAME=$DB_NAME -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT=$DB_PORT"
+                //     // env.DB_USER = "${DB_USER}"
+                //     // env.DB_NAME = "${DB_NAME}"
+                //     // env.DB_PASSWORD = "${DB_PASSWORD}"
+                //     // env.DB_PORT = "${DB_PORT}"
+                //     // env.DJANGO_SECRET_KEY = "${DJANGO_SECRET_KEY}"
+                //     sh """
+                //         env DB_USER="$DB_USER" \
+                //         DB_PASSWORD="$DB_PASSWORD" \
+                //         DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" \
                         
-                        docker-compose up -d
-                    """
-                }
+                //         docker-compose up -d
+                //     """
+                // }
                 
                 
                 // sh "docker build -t achebeh/conduit-app:$BUILD_NUMBER ."
