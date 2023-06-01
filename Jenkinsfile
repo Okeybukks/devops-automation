@@ -10,7 +10,6 @@ pipeline{
     stages{
         stage("Run Application Test"){
             steps{
-
                 echo 'Run application test'
                 echo 'Testing webhook from vscode'
                 echo "$GIT_BRANCH"
@@ -24,7 +23,7 @@ pipeline{
         stage("Build and Push Application Image"){
             when {
                 expression {
-                    
+
                     return "$GIT_BRANCH == test"; 
                  }
             }
