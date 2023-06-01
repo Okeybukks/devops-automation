@@ -32,7 +32,7 @@ pipeline{
                  }
             }
             steps{
-                sh 'docker compose up -e DB_NAME=$DB_NAME -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT=$DB_PORT'
+                sh 'docker compose up -d'
                 // withCredentials([
                 //     string(credentialsId: 'DJANGO_SECRET_KEY', variable: 'DJANGO_SECRET_KEY'),
                 //     string(credentialsId: 'DB_NAME', variable: "DB_NAME"),
