@@ -37,21 +37,24 @@ pipeline{
                     def envFilePath = "temp_env.list"
                     def envFileContent = """
                         DJANGO_SECRET_KEY=$djangoSecretKey\n
+                        DB_NAME=$dbName\n
+                        DB_USER=$dbUser\n
+                        DB_PASSWORD=$dbPassword\n
+                        DB_PORT=$dbPort\n
                         POSTGRES_DB=$dbName\n
                         POSTGRES_USER=$dbUser\n
-                        POSTGRES_PASSWORD=$dbPassword\n
-                        POSTGRES_PORT=$dbPort
+                        POSTGRES_PASSWORD=$dbPassword
                     """
 
                     writeFile file: envFilePath, text: envFileContent
 
-                    echo "Environment file content:\n${envFileContent}"
+                    // echo "Environment file content:\n${envFileContent}"
                     sh "cat temp_env.list"
 
 
-                    sh "docker compose --env-file ${envFilePath} up -d"
+                    // sh "docker compose --env-file ${envFilePath} up "
 
-                    sh "rm ${envFilePath}"
+                    // sh "rm ${envFilePath}"
 
                 }
                 // sh 'docker compose up -d'
