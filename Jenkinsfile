@@ -52,9 +52,9 @@ pipeline{
                     sh "cat temp_env.list"
 
 
-                    // sh "docker compose --env-file ${envFilePath} up "
+                    sh "docker compose --env-file temp_env.list up "
 
-                    // sh "rm ${envFilePath}"
+                    sh "rm ${envFilePath}"
 
                 }
                 // sh 'docker compose up -d'
