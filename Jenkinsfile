@@ -24,7 +24,7 @@ pipeline{
             when {
                 expression {
 
-                    return "$GIT_BRANCH == test"; 
+                    return "$GIT_BRANCH == main"; 
                  }
             }
             steps{
