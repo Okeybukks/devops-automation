@@ -37,10 +37,10 @@ pipeline{
                     def envFilePath = "temp_env.list"
                     def envFileContent = """
                         DJANGO_SECRET_KEY=$djangoSecretKey\n
-                        DB_NAME=$dbName\n
-                        DB_USER=$dbUser\n
-                        DB_PASSWORD=$dbPassword\n
-                        DB_PORT=$dbPort
+                        POSTGRES_DB=$dbName\n
+                        POSTGRES_USER=$dbUser\n
+                        POSTGRES_PASSWORD=$dbPassword\n
+                        POSTGRES_PORT=$dbPort
                     """
 
                     writeFile file: envFilePath, text: envFileContent

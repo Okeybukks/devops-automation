@@ -9,9 +9,9 @@ services:
       - db
     environment:
       - DB_HOST=db
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASS=${POSTGRES_PASSWORD}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     depends_on:
       db:
@@ -22,11 +22,11 @@ services:
       - db
     env_file:
       - env
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_PORT=${DB_PORT}
+    # environment:
+    #   - POSTGRES_DB=${DB_NAME}
+    #   - POSTGRES_USER$={DB_USER}
+    #   - POSTGRES_PASSWORD=${DB_PASSWORD}
+    #   - POSTGRES_PORT=${DB_PORT}
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
