@@ -67,10 +67,10 @@ pipeline{
                         credentialsId: "AWS_ID",
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]])
-                    sh "terraform init"
-                }
-                
+                    ]]){
+                        sh 'aws s3 ls'
+                    } 
+                }    
             }
         }
         stage("Staging Plan for Infrastructures Job"){
