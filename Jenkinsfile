@@ -77,7 +77,7 @@ pipeline{
             steps{
                 dir("./terraform"){
                     echo "This is the test stage for terraform staging plan"
-                    // sh "terraform plan"
+                    sh "terraform plan"
                 }
             }
         }
