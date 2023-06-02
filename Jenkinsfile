@@ -1,3 +1,22 @@
+def djangoSecretKey = credentials("DJANGO_SECRET_KEY")
+def dbName = "postgres"
+def dbUser = "postgres"
+def dbPassword = credentials("DB_PASSWORD")
+def dbPort = 5432
+def allowedHosts = credentials("ALLOWED_HOSTS")
+
+def envFilePath = "temp_env.list"
+def envFileContent = """
+    DJANGO_SECRET_KEY=$djangoSecretKey\n
+    DB_NAME=$dbName\n
+    DB_USER=$dbUser\n
+    DB_PASSWORD=$dbPassword\n
+    DB_PORT=$dbPort\n
+    POSTGRES_DB=$dbName\n
+    POSTGRES_USER=$dbUser\n
+    POSTGRES_PASSWORD=$dbPassword\n
+    ALLOWED_HOSTS=$allowedHosts
+"""
 pipeline{
     agent any
     triggers {
@@ -10,8 +29,6 @@ pipeline{
         stage("Run Application Test"){
             steps{
                 echo 'Run application test'
-                echo 'Testing webhook from vscode'
-                echo "$GIT_BRANCH"
             }
         }
         stage("Login to Dockerhub"){
@@ -28,35 +45,15 @@ pipeline{
             }
             steps{
                 script {
-                    def djangoSecretKey = credentials("DJANGO_SECRET_KEY")
-                    def dbName = "postgres"
-                    def dbUser = "postgres"
-                    def dbPassword = credentials("DB_PASSWORD")
-                    def dbPort = 5432
-                    def allowedHosts = credentials("ALLOWED_HOSTS")
-
-                    def envFilePath = "temp_env.list"
-                    def envFileContent = """
-                        DJANGO_SECRET_KEY=$djangoSecretKey\n
-                        DB_NAME=$dbName\n
-                        DB_USER=$dbUser\n
-                        DB_PASSWORD=$dbPassword\n
-                        DB_PORT=$dbPort\n
-                        POSTGRES_DB=$dbName\n
-                        POSTGRES_USER=$dbUser\n
-                        POSTGRES_PASSWORD=$dbPassword\n
-                        ALLOWED_HOSTS=$allowedHosts
-                    """
-
                     writeFile file: envFilePath, text: envFileContent
 
                     // echo "Environment file content:\n${envFileContent}"
                     sh "cat temp_env.list"
 
 
-                    sh "docker compose --env-file temp_env.list up"
+                    // sh "docker compose --env-file temp_env.list up"
 
-                    sh "rm ${envFilePath}"
+                    // sh "rm ${envFilePath}"
 
                 }
                 // sh 'docker compose up -d'
