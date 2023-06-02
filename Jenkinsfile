@@ -62,10 +62,13 @@ pipeline{
         stage("Initializing Terraform"){
             steps{
                 dir('./terraform'){
-                    withAWS(credentials: 'AWS_ID', region: 'us-east-1') {
-                        echo "This is the test stage for terraform staging plan"
-                        sh "terraform init"
-                }
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]])
+                    sh "terraform init"
                 }
                 
             }
