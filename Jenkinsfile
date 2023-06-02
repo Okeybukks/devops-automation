@@ -62,8 +62,10 @@ pipeline{
         stage("Initializing Terraform"){
             steps{
                 dir('./terraform'){
-                    echo "This is the test stage for terraform staging plan"
-                    sh "terraform init"
+                    withAWS(credentials: 'AWS_ID', region: 'us-east-1') {
+                        echo "This is the test stage for terraform staging plan"
+                        sh "terraform init"
+                }
                 }
                 
             }
@@ -72,7 +74,7 @@ pipeline{
             steps{
                 dir("./terraform"){
                     echo "This is the test stage for terraform staging plan"
-                    sh "terraform plan"
+                    // sh "terraform plan"
                 }
             }
         }
