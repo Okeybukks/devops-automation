@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 locals {
-    prefix = "${var.prefix}-${terraform.workspace}"
+    prefix = "${var.}-${terraform.workspace}"
     common_tags = {
         Enivironment = "${terraform.workspace}"
         Project = "${var.project}"

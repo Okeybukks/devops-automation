@@ -25,3 +25,9 @@ variable "name_tag" {
    description = "Name of the EC2 instance"
    default     = "My EC2 Instance"
 }
+
+variable prefix {
+  type        = string
+  default     = "conduit-app"
+}
+
