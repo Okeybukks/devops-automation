@@ -76,8 +76,14 @@ pipeline{
         stage("Staging Plan for Infrastructures Job"){
             steps{
                 dir("./terraform"){
-                    echo "This is the test stage for terraform staging plan"
-                    sh "terraform plan"
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform plan'
+                    } 
                 }
             }
         }
