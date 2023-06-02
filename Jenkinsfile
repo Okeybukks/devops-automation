@@ -61,7 +61,7 @@ pipeline{
         }
         stage("Initializing Terraform"){
             steps{
-                dir('/terraform'){
+                dir('./terraform'){
                     echo "This is the test stage for terraform staging plan"
                     sh "ls"
                 }
