@@ -33,7 +33,8 @@ pipeline{
         }
         stage("Login to Dockerhub"){
             steps{
-                sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
+                echo 'Run application test'
+                // sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
             }
         }
         stage("Build and Push Application Image"){
