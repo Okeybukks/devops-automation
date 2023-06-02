@@ -62,6 +62,7 @@ pipeline{
         stage("Initializing Terraform"){
             steps{
                 echo "This is the test stage for terraform staging plan"
+                sh "cd /terraform"
                 sh "ls"
                 // sh "terraform init"
             }
