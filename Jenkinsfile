@@ -63,16 +63,17 @@ pipeline{
             steps{
                 dir('./terraform'){
                     echo "This is the test stage for terraform staging plan"
-                    sh "ls"
+                    sh "terraform init"
                 }
-                // sh "terraform init"
+                
             }
         }
         stage("Staging Plan for Infrastructures Job"){
             steps{
-                echo "This is the test stage for terraform staging plan"
-                // sh "cd terrafrom"
-                // sh "terraform plan"
+                dir("./terraform"){
+                    echo "This is the test stage for terraform staging plan"
+                    sh "terraform plan"
+                }
             }
         }
         stage("Check Financial Expense of Infrastructures Job"){
