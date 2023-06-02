@@ -29,10 +29,10 @@ pipeline{
             steps{
                 script {
                     def djangoSecretKey = credentials("DJANGO_SECRET_KEY")
-                    def dbName = credentials("DB_NAME")
-                    def dbUser = credentials("DB_USER")
+                    def dbName = "postgres"
+                    def dbUser = "postgres"
                     def dbPassword = credentials("DB_PASSWORD")
-                    def dbPort = credentials("DB_PORT") 
+                    def dbPort = 5432
                     def allowedHosts = credentials("ALLOWED_HOSTS")
 
                     def envFilePath = "temp_env.list"

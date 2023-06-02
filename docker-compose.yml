@@ -24,23 +24,22 @@ services:
     networks:
       - db
     volumes:
-      - psql_db:/var/lib/postgresql
-    restart: unless-stopped
+      - pgdata:/var/lib/postgresql/data
+    restart: always
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
       interval: 10s
-      timeout: 5s
-      retries: 3
+      timeout: 45s
+      retries: 10
     ports:
       - 5432:5432
 
 volumes:
-    psql_db:
-      driver: local
+  pgdata:
 
 networks:
   db:
