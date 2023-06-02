@@ -59,9 +59,18 @@ pipeline{
                 // sh 'docker compose up -d'
             }
         }
+        stage("Initializing Terraform"){
+            steps{
+                echo "This is the test stage for terraform staging plan"
+                sh "cd terrafrom"
+                sh "terraform init"
+            }
+        }
         stage("Staging Plan for Infrastructures Job"){
             steps{
                 echo "This is the test stage for terraform staging plan"
+                sh "cd terrafrom"
+                sh "terraform plan"
             }
         }
         stage("Check Financial Expense of Infrastructures Job"){
