@@ -32,9 +32,13 @@ pipeline{
             }
         }
         stage("Login to Dockerhub"){
+            agent {
+                docker {
+                    image "docker:23.0.6-dind-alpine3.18"
+                }
+            }
             steps{
-                echo 'Run application test'
-                // sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
+                sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
             }
         }
         stage("Build and Push Application Image"){
