@@ -93,7 +93,7 @@ pipeline{
             }
             post {
                 always {
-                    archiveArtifacts artifacts: 'plan.json'
+                    archiveArtifacts artifacts: 'terraform/plan.json'
                 }
             }
         }
@@ -113,9 +113,9 @@ pipeline{
             steps{
                 step ([$class: 'CopyArtifact',
                         projectName: 'test',
-                        filter: 'plan.json',
+                        filter: 'terraform/plan.json',
                         selector: [specific(env.BUILD_NUMBER)]])
-                sh 'cat plan.json'
+                sh 'cat terraform/plan.json'
                 // echo "This is the financial check job"
                 // sh 'infracost breakdown --path plan.json'
                 // sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
