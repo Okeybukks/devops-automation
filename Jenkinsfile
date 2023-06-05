@@ -113,7 +113,7 @@ pipeline{
             steps{
                 step ([$class: 'CopyArtifact',
                         projectName: 'test',
-                        filter: 'plan.json',
+                        filter: './terraform/plan.json',
                         ])
                 sh 'cat plan.json'
                 // echo "This is the financial check job"
