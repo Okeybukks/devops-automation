@@ -113,9 +113,9 @@ pipeline{
             steps{
                 step ([$class: 'CopyArtifact',
                         projectName: 'test',
-                        filter: '**/terraform/plan.json',
+                        filter: 'plan.json',
                         ])
-                sh 'cat **/terraform/plan.json'
+                sh 'cat plan.json'
                 // echo "This is the financial check job"
                 // sh 'infracost breakdown --path plan.json'
                 // sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
