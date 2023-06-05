@@ -85,10 +85,15 @@ pipeline{
                         sh 'terraform plan -out tfplan.binary'
                         sh 'terraform show -json tfplan.binary > plan.json'
 
-                        archiveArtifacts artifacts: 'plan.json'
+                        
                         // sh 'cat plan.json'
                         
                     } 
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'plan.json'
                 }
             }
         }
