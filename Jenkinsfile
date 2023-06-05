@@ -74,20 +74,6 @@ pipeline{
             }
         }
         stage("Staging Plan for Infrastructures Job"){
-            steps{
-                dir("./terraform"){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform plan'
-                    } 
-                }
-            }
-        }
-        stage("Check Financial Expense of Infrastructures Job with Infracost"){
             agent {
                 docker {
                     image 'infracost/infracost:ci-latest'
@@ -101,8 +87,37 @@ pipeline{
                INFRACOST_VCS_BASE_BRANCH = 'main'
             }
             steps{
+                dir("./terraform"){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform plan -out tfplan.binary'
+                        sh 'terraform show -json tfplan.binary > plan.json'
+                        sh 'infracost breakdown --path plan.json'
+                    } 
+                }
+            }
+        }
+        stage("Check Financial Expense of Infrastructures Job with Infracost"){
+            // agent {
+            //     docker {
+            //         image 'infracost/infracost:ci-latest'
+            //         args "--user=root --entrypoint=''"
+            //     }
+            // }
+            // environment {
+            //    INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+            //    INFRACOST_VCS_PROVIDER = 'github'
+            //    INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+            //    INFRACOST_VCS_BASE_BRANCH = 'main'
+            // }
+            steps{
                 echo "This is the financial check job"
-                sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
+                // sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
+                // sh 'cat /tmp/infracost-base.json'
                 // sh 'infracost diff --path . --format=json --compare-to=/tmp/infracost-base.json --out-file=/tmp/infracost.json'                                                                       
             }
         }
