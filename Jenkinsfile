@@ -58,11 +58,6 @@ pipeline{
                 }
                 // sh 'docker compose up -d'
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'temp_env.list'
-                }
-            }
         }
         // stage("Initializing Terraform"){
         //     steps{
@@ -96,7 +91,11 @@ pipeline{
                     } 
                 }
             }
-            
+            post {
+                always {
+                    archiveArtifacts artifacts: '**/terraform/plan.json'
+                }
+            }
         }
         stage("Check Financial Expense of Infrastructures Job with Infracost"){
             // agent {
