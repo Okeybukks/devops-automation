@@ -92,7 +92,7 @@ pipeline{
 
                         
                         sh 'echo "Hello world" > plan.json'
-                        step([$class: 'CopyArtifact', projectName: 'Build and Push Application Image', filter: 'temp_env.list'])
+                        step([$class: 'CopyArtifact', projectName: env.JOB_NAME, filter: 'temp_env.list'])
 
                         
                         sh 'cat temp_env.list'
