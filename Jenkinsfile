@@ -59,33 +59,21 @@ pipeline{
                 // sh 'docker compose up -d'
             }
         }
-        stage("Initializing Terraform"){
-            steps{
-                dir('./terraform'){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform init'
-                    } 
-                }    
-            }
-        }
+        // stage("Initializing Terraform"){
+        //     steps{
+        //         dir('./terraform'){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform init'
+        //             } 
+        //         }    
+        //     }
+        // }
         stage("Staging Plan for Infrastructures Job"){
-            agent {
-                docker {
-                    image 'infracost/infracost:ci-latest'
-                    args "--user=root --entrypoint=''"
-                }
-            }
-            environment {
-               INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
-               INFRACOST_VCS_PROVIDER = 'github'
-               INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
-               INFRACOST_VCS_BASE_BRANCH = 'main'
-            }
             steps{
                 dir("./terraform"){
                     withCredentials([[
@@ -96,7 +84,9 @@ pipeline{
                     ]]){
                         sh 'terraform plan -out tfplan.binary'
                         sh 'terraform show -json tfplan.binary > plan.json'
-                        sh 'infracost breakdown --path plan.json'
+
+                        sh 'cat plan.json'
+                        
                     } 
                 }
             }
@@ -115,32 +105,34 @@ pipeline{
             //    INFRACOST_VCS_BASE_BRANCH = 'main'
             // }
             steps{
-                echo "This is the financial check job"
+                sh 'cat plan.json'
+                // echo "This is the financial check job"
+                // sh 'infracost breakdown --path plan.json'
                 // sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
                 // sh 'cat /tmp/infracost-base.json'
                 // sh 'infracost diff --path . --format=json --compare-to=/tmp/infracost-base.json --out-file=/tmp/infracost.json'                                                                       
             }
         }
-        stage("Staging Apply for Infrastructures Job"){
-            steps{
-                echo "This is the terraform staging apply"
-            }
-        }
-        stage("Production Plan for Infrastructures Job"){
-            steps{
-                echo "This is the test stage for terraform production plan"
-            }
-        }
-        stage("Production Apply for Infrastructures Job"){
-            steps{
-                echo "This is the terraform production apply"
-            }
-        }
-        stage("Destroy Infrastructures Job"){
-            steps{
-                echo "This is the terraform destroy job"
-            }
+        // stage("Staging Apply for Infrastructures Job"){
+        //     steps{
+        //         echo "This is the terraform staging apply"
+        //     }
+        // }
+        // stage("Production Plan for Infrastructures Job"){
+        //     steps{
+        //         echo "This is the test stage for terraform production plan"
+        //     }
+        // }
+        // stage("Production Apply for Infrastructures Job"){
+        //     steps{
+        //         echo "This is the terraform production apply"
+        //     }
+        // }
+        // stage("Destroy Infrastructures Job"){
+        //     steps{
+        //         echo "This is the terraform destroy job"
+        //     }
 
-        }
+        // }
     }
 }
