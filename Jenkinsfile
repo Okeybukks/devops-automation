@@ -85,7 +85,8 @@ pipeline{
                         sh 'terraform plan -out tfplan.binary'
                         sh 'terraform show -json tfplan.binary > plan.json'
 
-                        sh 'cat plan.json'
+                        archiveArtifacts artifacts: 'plan.json'
+                        // sh 'cat plan.json'
                         
                     } 
                 }
