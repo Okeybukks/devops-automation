@@ -108,7 +108,8 @@ pipeline{
             steps{
                 step ([$class: 'CopyArtifact',
                         projectName: 'test',
-                        filter: 'plan.json'])
+                        filter: 'plan.json',
+                        selector: [specific(env.BUILD_NUMBER)]])
                 sh 'cat plan.json'
                 // echo "This is the financial check job"
                 // sh 'infracost breakdown --path plan.json'
