@@ -48,7 +48,6 @@ pipeline{
                     writeFile file: envFilePath, text: envFileContent
 
                     // echo "Environment file content:\n${envFileContent}"
-                    sh "cat temp_env.list"
 
 
                     // sh "docker compose --env-file temp_env.list up"
@@ -57,6 +56,11 @@ pipeline{
 
                 }
                 // sh 'docker compose up -d'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'temp_env.list'
+                }
             }
         }
         // stage("Initializing Terraform"){
@@ -91,11 +95,11 @@ pipeline{
                     } 
                 }
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: '**/terraform/plan.json'
-                }
-            }
+            // post {
+            //     always {
+            //         archiveArtifacts artifacts: '**/terraform/plan.json'
+            //     }
+            // }
         }
         stage("Check Financial Expense of Infrastructures Job with Infracost"){
             // agent {
@@ -113,9 +117,9 @@ pipeline{
             steps{
                 step ([$class: 'CopyArtifact',
                         projectName: 'test',
-                        filter: './terraform/plan.json',
+                        filter: 'temp_env.list',
                         ])
-                sh 'cat plan.json'
+                sh 'cat temp_env.list'
                 // echo "This is the financial check job"
                 // sh 'infracost breakdown --path plan.json'
                 // sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
