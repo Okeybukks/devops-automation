@@ -93,7 +93,7 @@ pipeline{
             }
             post {
                 always {
-                    archiveArtifacts artifacts: './terraform/plan.json'
+                    archiveArtifacts artifacts: 'terraform/plan.json'
                 }
             }
         }
