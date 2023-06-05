@@ -82,18 +82,18 @@ pipeline{
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
-                        sh 'terraform plan -out tfplan.binary'
-                        sh 'terraform show -json tfplan.binary > plan.json'
+                        // sh 'terraform plan -out tfplan.binary'
+                        // sh 'terraform show -json tfplan.binary > plan.json'
 
                         
-                        // sh 'cat plan.json'
+                        sh 'echo "Hello world" >  plan.json'
                         
                     } 
                 }
             }
             post {
                 always {
-                    archiveArtifacts artifacts: 'terraform/plan.json'
+                    archiveArtifacts artifacts: './terraform/plan.json'
                 }
             }
         }
