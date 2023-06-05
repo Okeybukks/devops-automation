@@ -97,32 +97,32 @@ pipeline{
                 }
             }
         }
-        stage("Check Financial Expense of Infrastructures Job with Infracost"){
-            // agent {
-            //     docker {
-            //         image 'infracost/infracost:ci-latest'
-            //         args "--user=root --entrypoint=''"
-            //     }
-            // }
-            // environment {
-            //    INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
-            //    INFRACOST_VCS_PROVIDER = 'github'
-            //    INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
-            //    INFRACOST_VCS_BASE_BRANCH = 'main'
-            // }
-            steps{
-                step ([$class: 'CopyArtifact',
-                        projectName: 'test',
-                        filter: 'terraform/plan.json',
-                        selector: [specific(env.BUILD_NUMBER)]])
-                sh 'cat terraform/plan.json'
-                // echo "This is the financial check job"
-                // sh 'infracost breakdown --path plan.json'
-                // sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
-                // sh 'cat /tmp/infracost-base.json'
-                // sh 'infracost diff --path . --format=json --compare-to=/tmp/infracost-base.json --out-file=/tmp/infracost.json'                                                                       
-            }
-        }
+        // stage("Check Financial Expense of Infrastructures Job with Infracost"){
+        //     // agent {
+        //     //     docker {
+        //     //         image 'infracost/infracost:ci-latest'
+        //     //         args "--user=root --entrypoint=''"
+        //     //     }
+        //     // }
+        //     // environment {
+        //     //    INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+        //     //    INFRACOST_VCS_PROVIDER = 'github'
+        //     //    INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+        //     //    INFRACOST_VCS_BASE_BRANCH = 'main'
+        //     // }
+        //     steps{
+        //         step ([$class: 'CopyArtifact',
+        //                 projectName: 'test',
+        //                 filter: 'terraform/plan.json',
+        //                 selector: [specific(env.BUILD_NUMBER)]])
+        //         sh 'cat terraform/plan.json'
+        //         // echo "This is the financial check job"
+        //         // sh 'infracost breakdown --path plan.json'
+        //         // sh 'infracost breakdown --path . --format=json --out-file=/tmp/infracost-base.json'
+        //         // sh 'cat /tmp/infracost-base.json'
+        //         // sh 'infracost diff --path . --format=json --compare-to=/tmp/infracost-base.json --out-file=/tmp/infracost.json'                                                                       
+        //     }
+        // }
         // stage("Staging Apply for Infrastructures Job"){
         //     steps{
         //         echo "This is the terraform staging apply"
