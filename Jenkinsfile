@@ -115,10 +115,7 @@ pipeline{
             //    INFRACOST_VCS_BASE_BRANCH = 'main'
             // }
             steps{
-                step ([$class: 'CopyArtifact',
-                        projectName: 'test',
-                        filter: 'temp_env.list',
-                        ])
+                copyArtifacts filter: 'temp_env.list', projectName: 'test'
                 sh 'cat temp_env.list'
                 // echo "This is the financial check job"
                 // sh 'infracost breakdown --path plan.json'
