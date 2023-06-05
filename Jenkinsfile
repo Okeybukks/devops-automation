@@ -58,6 +58,11 @@ pipeline{
                 }
                 // sh 'docker compose up -d'
             }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'temp_env.list'
+                }
+            }
         }
         // stage("Initializing Terraform"){
         //     steps{
@@ -86,16 +91,12 @@ pipeline{
                         // sh 'terraform show -json tfplan.binary > plan.json'
 
                         
-                        sh 'echo "Hello world" >  plan.json'
+                        sh 'echo "Hello world" > plan.json'
                         
                     } 
                 }
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: '/terraform/plan.json'
-                }
-            }
+            
         }
         stage("Check Financial Expense of Infrastructures Job with Infracost"){
             // agent {
