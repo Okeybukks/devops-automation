@@ -106,6 +106,7 @@ pipeline{
             //    INFRACOST_VCS_BASE_BRANCH = 'main'
             // }
             steps{
+                copyArtifacts filter: "plan.json", projectName: 'test'
                 sh 'cat plan.json'
                 // echo "This is the financial check job"
                 // sh 'infracost breakdown --path plan.json'
