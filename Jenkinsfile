@@ -46,6 +46,7 @@ pipeline{
             steps{
                 script {
                     writeFile file: envFilePath, text: envFileContent
+                    archiveArtifacts artifacts: 'temp_env.list'
 
                     // echo "Environment file content:\n${envFileContent}"
 
@@ -57,11 +58,11 @@ pipeline{
                 }
                 // sh 'docker compose up -d'
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'temp_env.list'
-                }
-            }
+            // post {
+            //     always {
+            //         archiveArtifacts artifacts: 'temp_env.list'
+            //     }
+            // }
         }
         // stage("Initializing Terraform"){
         //     steps{
@@ -91,7 +92,9 @@ pipeline{
 
                         
                         sh 'echo "Hello world" > plan.json'
-                        copyArtifacts fingerprintArtifacts: true, projectName: 'test', selector: upstream()
+                        step([$class: 'CopyArtifact', projectName: 'Build and Push Application Image', filter: 'temp_env.list'])
+
+                        
                         sh 'cat temp_env.list'
                         
                     } 
