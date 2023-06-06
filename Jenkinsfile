@@ -104,7 +104,7 @@ pipeline{
             }
             steps{
                 sh 'echo "This is the financial check job"'
-                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ("${BUILD_NUMBER}")     
+                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
                 sh 'infracost breakdown --path "plan.json"'
             }
         }
