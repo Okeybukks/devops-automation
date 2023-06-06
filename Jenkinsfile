@@ -103,7 +103,7 @@ pipeline{
                INFRACOST_VCS_BASE_BRANCH = 'main'
             }
             steps{
-                echo "This is the financial check job"
+                sh 'echo "This is the financial check job"'
                 copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ("${BUILD_NUMBER}")     
                 infracost breakdown --path 'plan.json'
             }
