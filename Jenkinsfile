@@ -48,8 +48,6 @@ pipeline{
                     writeFile file: envFilePath, text: envFileContent
                     archiveArtifacts artifacts: 'temp_env.list'
 
-                    // echo "Environment file content:\n${envFileContent}"
-
 
                     // sh "docker compose --env-file temp_env.list up"
 
@@ -58,11 +56,7 @@ pipeline{
                 }
                 // sh 'docker compose up -d'
             }
-            // post {
-            //     always {
-            //         archiveArtifacts artifacts: 'temp_env.list'
-            //     }
-            // }
+
         }
         // stage("Initializing Terraform"){
         //     steps{
@@ -89,10 +83,8 @@ pipeline{
                     ]]){
                         // sh 'terraform plan -out tfplan.binary'
                         // sh 'terraform show -json tfplan.binary > plan.json'
+                        copyArtifacts filter: 'temp_env.list', fingerprintArtifacts: true, projectName: 'test', selector: specific ("${BUILD_NUMBER}")
 
-                        
-                        sh 'echo "Hello world" > plan.json'
-                        step([$class: 'CopyArtifact', projectName: env.JOB_NAME, filter: 'temp_env.list'])
 
                         
                         sh 'cat temp_env.list'
@@ -100,11 +92,6 @@ pipeline{
                     } 
                 }
             }
-            // post {
-            //     always {
-            //         archiveArtifacts artifacts: '**/terraform/plan.json'
-            //     }
-            // }
         }
         // stage("Check Financial Expense of Infrastructures Job with Infracost"){
         //     // agent {
