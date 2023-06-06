@@ -38,9 +38,10 @@ resource "aws_route" "route" {
 
 # Associate the route table with the subnets
 resource "aws_route_table_association" "route_table_association" {
-  count          = length(var.subnet_cidrs)
-  subnet_id      = aws_subnet.subnets[count.index].id
+  count          = length(var.public_subnets_cidr)
+  subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.route_table.id
 
   depends_on = [aws_route.route]
 }
+
