@@ -105,7 +105,7 @@ pipeline{
             steps{
                 sh 'echo "This is the financial check job"'
                 copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ("${BUILD_NUMBER}")     
-                infracost breakdown --path 'plan.json'
+                sh 'infracost breakdown --path "plan.json"'
             }
         }
         // stage("Staging Apply for Infrastructures Job"){
