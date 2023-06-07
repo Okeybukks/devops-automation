@@ -28,12 +28,12 @@ variable "instance_type" {
   default = "t2.medium"
 }
 
-variable "db_user" {
-  description = "database user"
-}
+# variable "db_user" {
+#   description = "database user"
+# }
 
-variable "db_password" {
-  description = "database password"
-}
+# variable "db_password" {
+#   description = "database password"
+# }
 
 
