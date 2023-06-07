@@ -47,8 +47,9 @@ pipeline{
                 script {
                     writeFile file: envFilePath, text: envFileContent
                     
-                    sh "cat temp_env.list"
-                    sh "echo $BUILD_NUMBER "
+                    // sh "cat temp_env.list"
+                    sh "docker build -t achebeh/test ."
+                    sh "docker image push achebeh/test "
 
                     // sh "docker compose --env-file temp_env.list up"
 
@@ -59,20 +60,20 @@ pipeline{
             }
 
         }
-        // stage("Initializing Terraform"){
-        //     steps{
-        //         dir('./terraform'){
-        //             withCredentials([[
-        //                 $class: 'AmazonWebServicesCredentialsBinding',
-        //                 credentialsId: "AWS_ID",
-        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
-        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-        //             ]]){
-        //                 sh 'terraform init'
-        //             } 
-        //         }    
-        //     }
-        // }
+        stage("Initializing Terraform"){
+            steps{
+                dir('./terraform'){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform init'
+                    } 
+                }    
+            }
+        }
         // stage("Staging Plan for Infrastructures Job"){
         //     steps{
         //         dir("./terraform"){
