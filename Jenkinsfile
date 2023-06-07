@@ -125,6 +125,11 @@ pipeline{
                 }    
             }
         }
+        stage("Check for Destroy Infrastructure") {
+            steps {
+                input "Proceed with the Terraform Destroy Stage?"
+            }
+        }
         // stage("Production Plan for Infrastructures Job"){
         //     steps{
         //         echo "This is the test stage for terraform production plan"
@@ -135,11 +140,20 @@ pipeline{
         //         echo "This is the terraform production apply"
         //     }
         // }
-        // stage("Destroy Infrastructures Job"){
-        //     steps{
-        //         echo "This is the terraform destroy job"
-        //     }
+        stage("Destroy Infrastructures Job"){
+            steps{
+                dir('./terraform'){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform destroy -auto-approve'
+                    } 
+                }    
+            }
 
-        // }
+        }
     }
 }
