@@ -1,23 +1,23 @@
 # Public Subnet Creation
 resource "aws_subnet" "public_subnet" {
-  vpc_id            = aws_vpc.main.id
-  count             = "${length(var.public_subnets_cidr)}"
-  cidr_block        = "${var.public_subnets_cidr[count.index]}"
-  availability_zone = "${var.availability_zone[count.index]}"
+  vpc_id                  = aws_vpc.main.id
+  count                   = length(var.public_subnets_cidr)
+  cidr_block              = var.public_subnets_cidr[count.index]
+  availability_zone       = var.availability_zone[count.index]
   map_public_ip_on_launch = true
 
-  tags = {"Name":"${local.prefix}-public_subnet-${count.index + 1}"}
+  tags = { "Name" : "${var.prefix}-public_subnet-${count.index + 1}" }
 }
 
 # Private Subnets Creation
 resource "aws_subnet" "private_subnet" {
-  vpc_id            = aws_vpc.main.id
-  count             = "${length(var.private_subnets_cidr)}"
-  cidr_block        = "${var.private_subnets_cidr[count.index]}"
-  availability_zone = "${var.availability_zone[count.index]}"
+  vpc_id                  = aws_vpc.main.id
+  count                   = length(var.private_subnets_cidr)
+  cidr_block              = var.private_subnets_cidr[count.index]
+  availability_zone       = var.availability_zone[count.index]
   map_public_ip_on_launch = false
 
-  tags = {"Name":"${local.prefix}-private_subnet-${count.index + 1}"}
+  tags = { "Name" : "${var.prefix}-private_subnet-${count.index + 1}" }
 }
 
 # # Create multiple subnets for the EKS cluster

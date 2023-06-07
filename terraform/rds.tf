@@ -1,8 +1,8 @@
 resource "aws_db_subnet_group" "main" {
-  name       = "${local.prefix}-db-subnet-gp"
+  name       = "${var.prefix}-db-subnet-gp"
   subnet_ids = [aws_subnet.private_subnet[0].id, aws_subnet.private_subnet[1].id]
 
-  tags = {"Name":"${local.prefix}-db-subnet-gp"}
+  tags = { "Name" : "${var.prefix}-db-subnet-gp" }
 }
 
 resource "aws_db_instance" "my_rds_db" {
@@ -12,8 +12,8 @@ resource "aws_db_instance" "my_rds_db" {
   instance_class         = "db.t2.micro"
   allocated_storage      = 20
   storage_type           = "gp2"
-  username               = "test"
-  password               = "test"
+  username               = var.db_name
+  password               = var.db_password
   db_name                = "conduit"
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
