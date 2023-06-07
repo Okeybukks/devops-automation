@@ -26,71 +26,72 @@ pipeline{
         DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
     }
     stages{
-        stage("Run Application Test"){
-            steps{
-                echo 'Run application test'
-            }
-        }
-        stage("Login to Dockerhub"){
-            steps{
-                sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
-            }
-        }
-        stage("Build and Push Application Image"){
-            when {
-                expression {
+        // stage("Run Application Test"){
+        //     steps{
+        //         echo 'Run application test'
+        //     }
+        // }
+        // stage("Login to Dockerhub"){
+        //     steps{
+        //         sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
+        //     }
+        // }
+        // stage("Build and Push Application Image"){
+        //     when {
+        //         expression {
 
-                    return "$GIT_BRANCH == main"; 
-                 }
-            }
-            steps{
-                script {
-                    writeFile file: envFilePath, text: envFileContent
+        //             return "$GIT_BRANCH == main"; 
+        //          }
+        //     }
+        //     steps{
+        //         script {
+        //             writeFile file: envFilePath, text: envFileContent
                     
-                    // sh "cat temp_env.list"
-                    sh "docker build -t achebeh/test ."
-                    sh "docker image push achebeh/test "
+        //             // sh "cat temp_env.list"
+        //             // sh "docker build -t achebeh/test ."
+        //             // sh "docker image push achebeh/test "
 
-                    // sh "docker compose --env-file temp_env.list up"
+        //             // sh "docker compose --env-file temp_env.list up"
 
-                    // sh "rm ${envFilePath}"
+        //             // sh "rm ${envFilePath}"
 
-                }
-                // sh 'docker compose up -d'
-            }
-
-        }
-        // stage("Initializing Terraform"){
-        //     steps{
-        //         dir('./terraform'){
-        //             withCredentials([[
-        //                 $class: 'AmazonWebServicesCredentialsBinding',
-        //                 credentialsId: "AWS_ID",
-        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
-        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-        //             ]]){
-        //                 sh 'terraform init'
-        //             } 
-        //         }    
-        //     }
-        // }
-        // stage("Staging Plan for Infrastructures Job"){
-        //     steps{
-        //         dir("./terraform"){
-        //             withCredentials([[
-        //                 $class: 'AmazonWebServicesCredentialsBinding',
-        //                 credentialsId: "AWS_ID",
-        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
-        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-        //             ]]){
-        //                 sh 'terraform plan -out tfplan.binary'
-        //                 sh 'terraform show -json tfplan.binary > plan.json'
-        //                 archiveArtifacts artifacts: 'plan.json'
-                        
-        //             } 
         //         }
+        //         // sh 'docker compose up -d'
         //     }
+
         // }
+        stage("Initializing Terraform"){
+            steps{
+                dir('./terraform'){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform init'
+                    } 
+                }    
+            }
+        }
+        stage("Staging Plan for Infrastructures Job"){
+            steps{
+                dir("./terraform"){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform plan -out tfplan.binary'
+                        sh 'terraform show -json tfplan.binary > plan.json'
+                        sh 'cat plan.json'
+                        archiveArtifacts artifacts: 'plan.json'
+                        
+                    } 
+                }
+            }
+        }
         // stage("Check Financial Expense of Infrastructures Job with Infracost"){
         //     agent {
         //         docker {
