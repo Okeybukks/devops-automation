@@ -1,8 +1,8 @@
 # Create a security group for the EKS cluster
-resource "aws_security_group" "sg" {
+resource "aws_security_group" "eks-cluster" {
   name        = "${var.prefix}-eks-cluster-sg"
   description = "Security group for EKS cluster"
-  vpc_id      = aws_vpc.vpc.id
+  vpc_id      = aws_vpc.main.id
 
   # Ingress rules
   ingress {
@@ -20,8 +20,8 @@ resource "aws_security_group" "sg" {
   }
 
   ingress {
-    from_port   = 1025
-    to_port     = 65535
+    from_port   = 8000
+    to_port     = 8000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -63,18 +63,57 @@ resource "aws_security_group" "worker_sg" {
   }
 }
 
+# Security Group for bastion instance
+resource "aws_security_group" "bastion" {
+  name        = "${var.prefix}-bastion"
+  description = "Allow TLS inbound and outbound traffic for selected ports"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "SSH to Instance"
+    from_port   = 22
+    to_port     = 222
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.private_subnet[0].cidr_block, aws_subnet.private_subnet[1].cidr_block]
+  }
+
+  tags = { "Name" : "${var.prefix}-bastion-SG" }
+
+}
+
 # Creating a security group for the RDS database
 resource "aws_security_group" "rds_sg" {
   name        = "${var.prefix}-security-group"
   description = "Security group for RDS database"
 
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.main.id
 
   # Ingress rule to allow incoming traffic on port 3306 from the EKS cluster security group
   ingress {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = [aws_security_group.sg.id]
+    security_groups = [aws_security_group.eks-cluster.id, aws_security_group.bastion.id]
   }
 }
