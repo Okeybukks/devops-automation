@@ -60,20 +60,20 @@ pipeline{
             }
 
         }
-        stage("Initializing Terraform"){
-            steps{
-                dir('./terraform'){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform init'
-                    } 
-                }    
-            }
-        }
+        // stage("Initializing Terraform"){
+        //     steps{
+        //         dir('./terraform'){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform init'
+        //             } 
+        //         }    
+        //     }
+        // }
         // stage("Staging Plan for Infrastructures Job"){
         //     steps{
         //         dir("./terraform"){
