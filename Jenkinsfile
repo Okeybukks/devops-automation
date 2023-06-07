@@ -111,11 +111,20 @@ pipeline{
                 sh 'infracost breakdown --path "plan.json"'
             }
         }
-        // stage("Staging Apply for Infrastructures Job"){
-        //     steps{
-        //         echo "This is the terraform staging apply"
-        //     }
-        // }
+        stage("Staging Apply for Infrastructures Job"){
+            steps{
+                dir('./terraform'){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform apply -auto-approve'
+                    } 
+                }    
+            }
+        }
         // stage("Production Plan for Infrastructures Job"){
         //     steps{
         //         echo "This is the test stage for terraform production plan"
