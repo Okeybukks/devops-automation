@@ -48,6 +48,7 @@ pipeline{
                     writeFile file: envFilePath, text: envFileContent
                     
                     sh "cat temp_env.list"
+                    sh "echo $BUILD_NUMBER "
 
                     // sh "docker compose --env-file temp_env.list up"
 
