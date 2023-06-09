@@ -144,20 +144,20 @@ pipeline{
         //         echo "This is the terraform production apply"
         //     }
         // }
-        stage("Destroy Infrastructures Job"){
-            steps{
-                dir('./terraform'){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform destroy -auto-approve'
-                    } 
-                }    
-            }
+        // stage("Destroy Infrastructures Job"){
+        //     steps{
+        //         dir('./terraform'){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform destroy -auto-approve'
+        //             } 
+        //         }    
+        //     }
 
-        }
+        // }
     }
 }
