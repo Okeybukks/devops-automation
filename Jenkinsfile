@@ -110,8 +110,28 @@ pipeline{
             steps{
                 sh 'echo "This is the financial check job"'
                 copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost breakdown --path "plan.json" --out-file=infracost.json --format=json'
+                sh 'infracost breakdown --path "plan.json" --out-file=/tmp/infracost.json --format=json'
                 archiveArtifacts artifacts: 'infracost.json'
+
+            }
+        }
+        stage("Check Financial Difference of Infrastructures Job with Infracost"){
+            agent {
+                docker {
+                    image 'infracost/infracost:ci-latest'
+                    args "--user=root --entrypoint=''"
+                }
+            }
+            environment {
+               INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+               INFRACOST_VCS_PROVIDER = 'github'
+               INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+               INFRACOST_VCS_BASE_BRANCH = 'main'
+            }
+            steps{
+                sh 'echo "This is the financial check job"'
+                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
+                sh 'infracost diff --path "plan.json" --compare-to=/tmp/infracost.json'
 
             }
         }
