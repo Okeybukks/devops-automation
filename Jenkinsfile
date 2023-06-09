@@ -76,65 +76,65 @@ pipeline{
                 }    
             }
         }
-        stage("Staging Plan for Infrastructures Job"){
-            steps{
-                dir("./terraform"){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform plan -out tfplan.binary'
-                        sh 'terraform show -json tfplan.binary > plan.json'
-                        sh 'cat plan.json'
-                        archiveArtifacts artifacts: 'plan.json'
+        // stage("Staging Plan for Infrastructures Job"){
+        //     steps{
+        //         dir("./terraform"){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform plan -out tfplan.binary'
+        //                 sh 'terraform show -json tfplan.binary > plan.json'
+        //                 sh 'cat plan.json'
+        //                 archiveArtifacts artifacts: 'plan.json'
                         
-                    } 
-                }
-            }
-        }
-        stage("Check Financial Expense of Infrastructures Job with Infracost"){
-            agent {
-                docker {
-                    image 'infracost/infracost:ci-latest'
-                    args "--user=root --entrypoint=''"
-                }
-            }
-            environment {
-               INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
-               INFRACOST_VCS_PROVIDER = 'github'
-               INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
-               INFRACOST_VCS_BASE_BRANCH = 'main'
-            }
-            steps{
-                sh 'echo "This is the financial check job"'
-                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost breakdown --path "plan.json" --out-file=/tmp/infracost.json --format=json'
-                archiveArtifacts artifacts: 'infracost.json'
+        //             } 
+        //         }
+        //     }
+        // }
+        // stage("Check Financial Expense of Infrastructures Job with Infracost"){
+        //     agent {
+        //         docker {
+        //             image 'infracost/infracost:ci-latest'
+        //             args "--user=root --entrypoint=''"
+        //         }
+        //     }
+        //     environment {
+        //        INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+        //        INFRACOST_VCS_PROVIDER = 'github'
+        //        INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+        //        INFRACOST_VCS_BASE_BRANCH = 'main'
+        //     }
+        //     steps{
+        //         sh 'echo "This is the financial check job"'
+        //         copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
+        //         sh 'infracost breakdown --path "plan.json" --out-file=/tmp/infracost.json --format=json'
+        //         archiveArtifacts artifacts: 'infracost.json'
 
-            }
-        }
-        stage("Check Financial Difference of Infrastructures Job with Infracost"){
-            agent {
-                docker {
-                    image 'infracost/infracost:ci-latest'
-                    args "--user=root --entrypoint=''"
-                }
-            }
-            environment {
-               INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
-               INFRACOST_VCS_PROVIDER = 'github'
-               INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
-               INFRACOST_VCS_BASE_BRANCH = 'main'
-            }
-            steps{
-                sh 'echo "This is the financial check job"'
-                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost diff --path "plan.json" --compare-to=/tmp/infracost.json'
+        //     }
+        // }
+        // stage("Check Financial Difference of Infrastructures Job with Infracost"){
+        //     agent {
+        //         docker {
+        //             image 'infracost/infracost:ci-latest'
+        //             args "--user=root --entrypoint=''"
+        //         }
+        //     }
+        //     environment {
+        //        INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+        //        INFRACOST_VCS_PROVIDER = 'github'
+        //        INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+        //        INFRACOST_VCS_BASE_BRANCH = 'main'
+        //     }
+        //     steps{
+        //         sh 'echo "This is the financial check job"'
+        //         copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
+        //         sh 'infracost diff --path "plan.json" --compare-to=/tmp/infracost.json'
 
-            }
-        }
+        //     }
+        // }
         // stage("Staging Apply for Infrastructures Job"){
         //     steps{
         //         dir('./terraform'){
@@ -164,20 +164,20 @@ pipeline{
         //         echo "This is the terraform production apply"
         //     }
         // }
-        // stage("Destroy Infrastructures Job"){
-        //     steps{
-        //         dir('./terraform'){
-        //             withCredentials([[
-        //                 $class: 'AmazonWebServicesCredentialsBinding',
-        //                 credentialsId: "AWS_ID",
-        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
-        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-        //             ]]){
-        //                 sh 'terraform destroy -auto-approve'
-        //             } 
-        //         }    
-        //     }
+        stage("Destroy Infrastructures Job"){
+            steps{
+                dir('./terraform'){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform destroy -auto-approve'
+                    } 
+                }    
+            }
 
-        // }
+        }
     }
 }
