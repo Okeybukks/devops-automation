@@ -138,7 +138,7 @@ pipeline{
             }
             steps{
                 sh 'echo "This is the financial check job"'
-                copyArtifacts filter: "${WORKSPACE}/archive/infracost.json", fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
+                copyArtifacts filter: "infracost.json", fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
                 sh 'cat infracost.json'
                
                 // sh 'infracost diff --compare-to="infracost.json"'
