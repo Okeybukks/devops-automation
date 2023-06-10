@@ -91,7 +91,7 @@ pipeline{
                         archiveArtifacts artifacts: 'plan.json'
                         script {
                             def filePath = "${WORKSPACE}/archive/plan.json"
-                            echo ${filePath}
+                            echo "${filePath}"
                         }
                         
                     } 
@@ -118,7 +118,7 @@ pipeline{
                 archiveArtifacts artifacts: 'infracost.json'
                 script {
                             def filePath = "${WORKSPACE}/archive/infracost.json"
-                            echo ${filePath}
+                            echo "${filePath}"
                         }
 
             }
