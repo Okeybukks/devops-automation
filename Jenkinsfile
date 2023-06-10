@@ -110,7 +110,7 @@ pipeline{
             steps{
                 sh 'echo "This is the financial check job"'
                 copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost breakdown --path "plan.json" --out-file=/tmp/infracost.json --format=json'
+                sh 'infracost breakdown --path "plan.json" --out-file=infracost.json --format=json'
                 archiveArtifacts artifacts: 'infracost.json'
 
             }
@@ -130,8 +130,9 @@ pipeline{
             }
             steps{
                 sh 'echo "This is the financial check job"'
-                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost diff --path "plan.json" --compare-to=/tmp/infracost.json'
+                copyArtifacts filter: 'infracost.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
+               
+                sh 'infracost diff --compare-to="infracost.json"'
 
             }
         }
