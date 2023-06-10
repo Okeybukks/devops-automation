@@ -4,7 +4,7 @@ def dbUser = "postgres"
 def dbPassword = credentials("DB_PASSWORD")
 def dbPort = 5432
 def allowedHosts = credentials("ALLOWED_HOSTS")
-def github_token = credentials("GITHUB_TOKEN")
+
 
 def envFilePath = "temp_env.list"
 def envFileContent = """
@@ -127,12 +127,13 @@ pipeline{
                INFRACOST_VCS_PROVIDER = 'github'
                INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
                INFRACOST_VCS_BASE_BRANCH = 'main'
+               GITHUB_TOKEN = credentials("GITHUB_TOKEN")
             }
             steps{
                 dir('./terraform'){
                     sh 'echo "This is the financial check job"'
                 copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost comment github --path  "plan.json" --policy-path infracost-policy.rego --github-token ${github_token}'
+                sh 'infracost comment github --path  "plan.json" --policy-path infracost-policy.rego --github-token $GITHUB_TOKEN'
                 
                 }
                 
