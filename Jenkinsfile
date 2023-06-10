@@ -89,8 +89,11 @@ pipeline{
                         sh 'terraform show -json tfplan.binary > plan.json'
                         sh 'cat plan.json'
                         archiveArtifacts artifacts: 'plan.json'
-                        def filePath = "${WORKSPACE}/archive/plan.json"
-                        sh 'echo $filePath'
+                        script {
+                            def filePath = "${WORKSPACE}/archive/plan.json"
+                            echo ${filePath}
+                        }
+                        
                     } 
                 }
             }
@@ -113,8 +116,10 @@ pipeline{
                 copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
                 sh 'infracost breakdown --path "plan.json" --out-file=infracost.json --format=json'
                 archiveArtifacts artifacts: 'infracost.json'
-                def filePath = "${WORKSPACE}/archive/infracost.json"
-                sh 'echo $filePath'
+                script {
+                            def filePath = "${WORKSPACE}/archive/infracost.json"
+                            echo ${filePath}
+                        }
 
             }
         }
