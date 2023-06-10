@@ -87,12 +87,8 @@ pipeline{
                     ]]){
                         sh 'terraform plan -out tfplan.binary'
                         sh 'terraform show -json tfplan.binary > plan.json'
-                        sh 'cat plan.json'
+    
                         archiveArtifacts artifacts: 'plan.json'
-                        // script {
-                        //     def filePath = "${WORKSPACE}/archive/plan.json"
-                        //     echo "${filePath}"
-                        // }
                         
                     } 
                 }
@@ -136,7 +132,7 @@ pipeline{
                 sh 'echo "This is the financial check job"'
                 copyArtifacts filter: "infracost.json", fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
                
-                sh 'infracost diff --path --compare-to="infracost.json"'
+                sh 'infracost diff --path "infracost.json"'
 
             }
         }
