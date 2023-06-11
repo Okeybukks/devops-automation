@@ -133,7 +133,7 @@ pipeline{
                 dir('./terraform'){
                     sh 'echo "This is the financial check job"'
                 copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost comment github --path  "plan.json" --policy-path infracost-policy.rego --github-token $GITHUB_TOKEN'
+                sh 'infracost comment github --path  "plan.json" --policy-path infracost-policy.rego --github-token $GITHUB_TOKEN --repo $WORKSPACE'
                 
                 }
                 
