@@ -112,7 +112,8 @@ pipeline{
                 dir("./terraform") {
                     sh 'echo "This is the financial check job"'
                     copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                    sh 'infracost breakdown --path . '
+                    sh 'infracost breakdown --path . --format json --out-file infracost.json'
+                    archiveArtifacts artifacts: 'infracost.json'
                 } 
             }
         }
@@ -134,8 +135,8 @@ pipeline{
             steps{
                 dir('./terraform'){
                     sh 'echo "This is the financial check job"'
-                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost comment github --path . --policy-path infracost-policy.rego \
+                copyArtifacts filter: 'infracost.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
+                sh 'infracost comment github --path infracost.json --policy-path infracost-policy.rego \
                 --github-token $GITHUB_TOKEN --repo $GITHUB_REPO --commit $GIT_COMMIT'
                 }
             }
