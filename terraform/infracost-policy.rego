@@ -15,7 +15,7 @@ deny[out] {
 	# out defines the output for this policy. This output must be formatted with a `msg` and `failed` property.
   	out := {
     	# the msg you want to display in your PR comment
-    	"msg": msg,
+    	"msg": to_number(input.monthlyCost),
         # a boolean value that determines if this policy has failed.
         # In this case if the Infracost breakdown output diffTotalMonthlyCost is greater that $10.
     	"failed": to_number(input.monthlyCost) >= maxDiff
