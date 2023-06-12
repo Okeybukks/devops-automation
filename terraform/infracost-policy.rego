@@ -12,6 +12,6 @@ deny[out] {
 
   	out := {
     	"msg": msg,
-    	"failed": to_number(input.totalMonthlyCost) <= maxMonthlyCost
+    	"failed": to_number(input.totalMonthlyCost) >= maxMonthlyCost
   	}
 }
