@@ -9,15 +9,15 @@ deny[out] {
 	# msg defines the output that will be shown in PR comments under the Policy Checks/Failures section.
 	msg := sprintf(
 		"Total monthly cost diff must be less than $%.2f (actual diff is $%.2f)",
-		[maxDiff, to_number(input.monthlyCost)],
+		[maxDiff, to_number(input.monthly_cost)],
 	)
 
 	# out defines the output for this policy. This output must be formatted with a `msg` and `failed` property.
   	out := {
     	# the msg you want to display in your PR comment
-    	"msg": to_number(input.monthlyCost),
+    	"msg": to_number(input.monthly_cost),
         # a boolean value that determines if this policy has failed.
         # In this case if the Infracost breakdown output diffTotalMonthlyCost is greater that $10.
-    	"failed": to_number(input.monthlyCost) >= maxDiff
+    	"failed": to_number(input.monthly_cost) >= maxDiff
   	}
 }
