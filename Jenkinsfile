@@ -109,39 +109,40 @@ pipeline{
                INFRACOST_VCS_BASE_BRANCH = 'main'
             }
             steps{
-                sh 'echo "This is the financial check job"'
-                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost breakdown --path  "plan.json" '
-
-            }
-        }
-        stage("Post Infracost comment"){
-            agent {
-                docker {
-                    image 'infracost/infracost:ci-latest'
-                    args "--user=root --entrypoint=''"
-                }
-            }
-            environment {
-               INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
-               INFRACOST_VCS_PROVIDER = 'github'
-               INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
-               INFRACOST_VCS_BASE_BRANCH = 'main'
-               GITHUB_TOKEN = credentials("GITHUB_TOKEN")
-               GITHUB_REPO = "Okeybukks/devops-automation"
-            }
-            steps{
-                dir('./terraform'){
+                dir("./terraform") {
                     sh 'echo "This is the financial check job"'
-                copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                sh 'infracost comment github --path  "plan.json" --policy-path infracost-policy.rego \
-                --github-token $GITHUB_TOKEN --repo $GITHUB_REPO --commit $GIT_COMMIT'
-                
-                }
-                
-
+                    copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
+                    sh 'infracost breakdown --path . '
+                } 
             }
         }
+        // stage("Post Infracost comment"){
+        //     agent {
+        //         docker {
+        //             image 'infracost/infracost:ci-latest'
+        //             args "--user=root --entrypoint=''"
+        //         }
+        //     }
+        //     environment {
+        //        INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+        //        INFRACOST_VCS_PROVIDER = 'github'
+        //        INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+        //        INFRACOST_VCS_BASE_BRANCH = 'main'
+        //        GITHUB_TOKEN = credentials("GITHUB_TOKEN")
+        //        GITHUB_REPO = "Okeybukks/devops-automation"
+        //     }
+        //     steps{
+        //         dir('./terraform'){
+        //             sh 'echo "This is the financial check job"'
+        //         copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
+        //         sh 'infracost comment github --path . --policy-path infracost-policy.rego \
+        //         --github-token $GITHUB_TOKEN --repo $GITHUB_REPO --commit $GIT_COMMIT'
+                
+        //         }
+                
+
+        //     }
+        // }
         // stage("Staging Apply for Infrastructures Job"){
         //     steps{
         //         dir('./terraform'){
