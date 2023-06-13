@@ -29,40 +29,40 @@ pipeline{
         TF_VAR_db_password = credentials("DB_PASSWORD")
     }
     stages{
-        stage("Run Application Test"){
-            steps{
-                echo 'Run application test'
-            }
-        }
-        stage("Login to Dockerhub"){
-            steps{
-                sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
-            }
-        }
-        stage("Build and Push Application Image"){
-            when {
-                expression {
+        // stage("Run Application Test"){
+        //     steps{
+        //         echo 'Run application test'
+        //     }
+        // }
+        // stage("Login to Dockerhub"){
+        //     steps{
+        //         sh 'echo $DOCKERHUB_CREDENTIAL_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
+        //     }
+        // }
+        // stage("Build and Push Application Image"){
+        //     when {
+        //         expression {
 
-                    return "$GIT_BRANCH == main"; 
-                 }
-            }
-            steps{
-                script {
-                    writeFile file: envFilePath, text: envFileContent
+        //             return "$GIT_BRANCH == main"; 
+        //          }
+        //     }
+        //     steps{
+        //         script {
+        //             writeFile file: envFilePath, text: envFileContent
                     
-                    // sh "cat temp_env.list"
-                    // sh "docker build -t achebeh/test ."
-                    // sh "docker image push achebeh/test "
+        //             // sh "cat temp_env.list"
+        //             // sh "docker build -t achebeh/test ."
+        //             // sh "docker image push achebeh/test "
 
-                    // sh "docker compose --env-file temp_env.list up"
+        //             // sh "docker compose --env-file temp_env.list up"
 
-                    // sh "rm ${envFilePath}"
+        //             // sh "rm ${envFilePath}"
 
-                }
-                // sh 'docker compose up -d'
-            }
+        //         }
+        //         // sh 'docker compose up -d'
+        //     }
 
-        }
+        // }
         stage("Initializing Terraform"){
             steps{
                 dir('./terraform'){
@@ -95,54 +95,54 @@ pipeline{
                 }
             }
         }
-        stage("Check Financial Expense of Infrastructures Job with Infracost"){
-            agent {
-                docker {
-                    image 'infracost/infracost:ci-latest'
-                    args "--user=root --entrypoint=''"
-                }
-            }
-            environment {
-               INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
-               INFRACOST_VCS_PROVIDER = 'github'
-               INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
-               INFRACOST_VCS_BASE_BRANCH = 'main'
-            }
-            steps{
-                dir("./terraform") {
-                    sh 'echo "This is the financial check job"'
-                    copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
-                    sh 'infracost breakdown --path . --format json --out-file infracost.json'
-                    archiveArtifacts artifacts: 'infracost.json'
+        // stage("Check Financial Expense of Infrastructures Job with Infracost"){
+        //     agent {
+        //         docker {
+        //             image 'infracost/infracost:ci-latest'
+        //             args "--user=root --entrypoint=''"
+        //         }
+        //     }
+        //     environment {
+        //        INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+        //        INFRACOST_VCS_PROVIDER = 'github'
+        //        INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+        //        INFRACOST_VCS_BASE_BRANCH = 'main'
+        //     }
+        //     steps{
+        //         dir("./terraform") {
+        //             sh 'echo "This is the financial check job"'
+        //             copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
+        //             sh 'infracost breakdown --path . --format json --out-file infracost.json'
+        //             archiveArtifacts artifacts: 'infracost.json'
                     
-                } 
-            }
-        }
-        stage("Post Infracost comment"){
-            agent {
-                docker {
-                    image 'infracost/infracost:ci-latest'
-                    args "--user=root --entrypoint=''"
-                }
-            }
-            environment {
-               INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
-               INFRACOST_VCS_PROVIDER = 'github'
-               INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
-               INFRACOST_VCS_BASE_BRANCH = 'main'
-               GITHUB_TOKEN = credentials("GITHUB_TOKEN")
-               GITHUB_REPO = "Okeybukks/devops-automation"
-            }
-            steps{
-                dir('./terraform'){
-                    sh 'echo "This is the financial check job"'
-                    copyArtifacts filter: 'infracost.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')    
+        //         } 
+        //     }
+        // }
+        // stage("Post Infracost comment"){
+        //     agent {
+        //         docker {
+        //             image 'infracost/infracost:ci-latest'
+        //             args "--user=root --entrypoint=''"
+        //         }
+        //     }
+        //     environment {
+        //        INFRACOST_API_KEY = credentials("INFRACOST_API_KEY")
+        //        INFRACOST_VCS_PROVIDER = 'github'
+        //        INFRACOST_VCS_REPOSITORY_URL = 'https://github.com/Okeybukks/devops-automation'
+        //        INFRACOST_VCS_BASE_BRANCH = 'main'
+        //        GITHUB_TOKEN = credentials("GITHUB_TOKEN")
+        //        GITHUB_REPO = "Okeybukks/devops-automation"
+        //     }
+        //     steps{
+        //         dir('./terraform'){
+        //             sh 'echo "This is the financial check job"'
+        //             copyArtifacts filter: 'infracost.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')    
 
-                    sh 'infracost comment github --path infracost.json --policy-path infracost-policy.rego \
-                    --github-token $GITHUB_TOKEN --repo $GITHUB_REPO --commit $GIT_COMMIT'
-                }
-            }
-        }
+        //             sh 'infracost comment github --path infracost.json --policy-path infracost-policy.rego \
+        //             --github-token $GITHUB_TOKEN --repo $GITHUB_REPO --commit $GIT_COMMIT'
+        //         }
+        //     }
+        // }
         stage("Staging Apply for Infrastructures Job"){
             steps{
                 dir('./terraform'){
