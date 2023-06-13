@@ -1,5 +1,5 @@
 # Create a VPC for the EKS cluster
-resource "aws_vpc" "main" {
+resource "aws_vpc" "altschool-capstone" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
@@ -10,7 +10,7 @@ resource "aws_vpc" "main" {
 
 # Create an internet gateway for the VPC
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.altschool-capstone.id
 
   tags = {
     Name = "${var.prefix}-eks-igw"
@@ -20,7 +20,7 @@ resource "aws_internet_gateway" "igw" {
 
 # Create a route table for the VPC
 resource "aws_route_table" "route_table" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.altschool-capstone.id
 
   tags = {
     Name = "${var.prefix}-eks-route-table"

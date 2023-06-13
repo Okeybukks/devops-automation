@@ -1,6 +1,6 @@
 # Public Subnet Creation
 resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.main.id
+  vpc_id                  = aws_vpc.altschool-capstone.id
   count                   = length(var.public_subnets_cidr)
   cidr_block              = var.public_subnets_cidr[count.index]
   availability_zone       = var.availability_zone[count.index]
@@ -11,7 +11,7 @@ resource "aws_subnet" "public_subnet" {
 
 # Private Subnets Creation
 resource "aws_subnet" "private_subnet" {
-  vpc_id                  = aws_vpc.main.id
+  vpc_id                  = aws_vpc.altschool-capstone.id
   count                   = length(var.private_subnets_cidr)
   cidr_block              = var.private_subnets_cidr[count.index]
   availability_zone       = var.availability_zone[count.index]
