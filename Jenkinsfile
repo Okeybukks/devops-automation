@@ -87,9 +87,8 @@ pipeline{
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
                         sh 'terraform plan -out tfplan.binary'
-                        sh 'terraform show -json tfplan.binary > plan.json'
-    
-                        archiveArtifacts artifacts: 'plan.json'
+                        
+                        archiveArtifacts artifacts: 'tfplan.binary'
                         
                     } 
                 }
@@ -152,7 +151,8 @@ pipeline{
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
-                        sh 'terraform apply -auto-approve'
+                        copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
+                        sh 'terraform apply -auto-approve tfplan.binary'
                     } 
                 }    
             }
