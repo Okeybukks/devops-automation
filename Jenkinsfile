@@ -84,6 +84,7 @@ pipeline{
                         PLATFORM=$(uname -s)_$ARCH
                         curl -sLO "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
                         tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+                        mv /tmp/eksctl /usr/local/bin
 
                         # 'latest' kubectl is backward compatible with older api versions
                         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
