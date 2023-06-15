@@ -63,37 +63,37 @@ pipeline{
         //     }
 
         // }
-        // stage("Initializing Terraform"){
-        //     steps{
-        //         dir('./terraform'){
-        //             withCredentials([[
-        //                 $class: 'AmazonWebServicesCredentialsBinding',
-        //                 credentialsId: "AWS_ID",
-        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
-        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-        //             ]]){
-        //                 sh 'terraform init'
-        //             } 
-        //         }    
-        //     }
-        // }
-        // stage("Staging Plan for Infrastructures Job"){
-        //     steps{
-        //         dir("./terraform"){
-        //             withCredentials([[
-        //                 $class: 'AmazonWebServicesCredentialsBinding',
-        //                 credentialsId: "AWS_ID",
-        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
-        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-        //             ]]){
-        //                 sh 'terraform plan -out tfplan.binary'
+        stage("Initializing Terraform"){
+            steps{
+                dir('./terraform'){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform init'
+                    } 
+                }    
+            }
+        }
+        stage("Staging Plan for Infrastructures Job"){
+            steps{
+                dir("./terraform"){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        sh 'terraform plan -out tfplan.binary'
                         
-        //                 archiveArtifacts artifacts: 'tfplan.binary'
+                        archiveArtifacts artifacts: 'tfplan.binary'
                         
-        //             } 
-        //         }
-        //     }
-        // }
+                    } 
+                }
+            }
+        }
         // stage("Check Financial Expense of Infrastructures Job with Infracost"){
         //     agent {
         //         docker {
@@ -142,21 +142,21 @@ pipeline{
         //         }
         //     }
         // }
-        // stage("Staging Apply for Infrastructures Job"){
-        //     steps{
-        //         dir('./terraform'){
-        //             withCredentials([[
-        //                 $class: 'AmazonWebServicesCredentialsBinding',
-        //                 credentialsId: "AWS_ID",
-        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
-        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-        //             ]]){
-        //                 copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
-        //                 sh 'terraform apply -auto-approve tfplan.binary'
-        //             } 
-        //         }    
-        //     }
-        // }
+        stage("Staging Apply for Infrastructures Job"){
+            steps{
+                dir('./terraform'){
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "AWS_ID",
+                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
+                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+                    ]]){
+                        copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
+                        sh 'terraform apply -auto-approve tfplan.binary'
+                    } 
+                }    
+            }
+        }
         // stage("Check for Destroy Infrastructure") {
         //     steps {
         //         input "Proceed with the Terraform Destroy Stage?"
