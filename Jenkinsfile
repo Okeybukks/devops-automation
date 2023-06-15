@@ -76,7 +76,7 @@ pipeline{
         stage("Create Setup for EKS, Kubectl") {
             steps{
                 script {
-                    println "Getting the kubectl, eksctl binaries..."
+                    sh "echo 'Getting the kubectl, eksctl binaries...'"
 
                     sh """
                         # Installing eksctl
