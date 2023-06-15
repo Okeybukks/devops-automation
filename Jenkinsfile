@@ -19,16 +19,6 @@ def envFileContent = """
     ALLOWED_HOSTS=$allowedHosts
 """
 pipeline{
-    parameters {
-    choice(name: 'action', choices: 'create\ndestroy', description: 'Create/update or destroy the eks cluster.')
-    string(name: 'cluster', defaultValue : 'AltSchoo', description: "EKS cluster name.")
-    string(name: 'instance_type', defaultValue : 't2.medium', description: "k8s worker node instance type.")
-    string(name: 'num_workers', defaultValue : '2', description: "k8s number of worker instances.")
-    string(name: 'max_workers', defaultValue : '3', description: "k8s maximum number of worker instances that can be scaled.")
-    string(name: 'region', defaultValue : 'us-east-1', description: "AWS region.")
-    string(name: 'key_pair', defaultValue : 'spicysomtam-aws7', description: "EC2 instance ssh keypair.")
-  }
-
     agent any
     triggers {
         githubPush()
@@ -73,30 +63,6 @@ pipeline{
         //     }
 
         // }
-        stage("Create Setup for EKS, Kubectl") {
-            steps{
-                script {
-                    println "Getting the kubectl, eksctl binaries..."
-
-                    sh '''
-                        # Installing eksctl
-                        ARCH=amd64
-                        PLATFORM=$(uname -s)_$ARCH
-                        curl -sLO "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
-                        tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
-                        mv /tmp/eksctl /usr/local/bin
-
-                        # 'latest' kubectl is backward compatible with older api versions
-                        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                        rm -rf linux-amd64
-                        chmod u+x eksctl kubectl
-                        ls -l eksctl kubectl)
-                    '''
-                    println "Checking jq is installed:"
-                    sh "which jq"
-                }
-            }
-        }
         // stage("Initializing Terraform"){
         //     steps{
         //         dir('./terraform'){
