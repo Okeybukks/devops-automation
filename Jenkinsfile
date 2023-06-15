@@ -19,6 +19,16 @@ def envFileContent = """
     ALLOWED_HOSTS=$allowedHosts
 """
 pipeline{
+    parameters {
+    choice(name: 'action', choices: 'create\ndestroy', description: 'Create/update or destroy the eks cluster.')
+    string(name: 'cluster', defaultValue : 'AltSchoo', description: "EKS cluster name.")
+    string(name: 'instance_type', defaultValue : 't2.medium', description: "k8s worker node instance type.")
+    string(name: 'num_workers', defaultValue : '2', description: "k8s number of worker instances.")
+    string(name: 'max_workers', defaultValue : '3', description: "k8s maximum number of worker instances that can be scaled.")
+    string(name: 'region', defaultValue : 'us-east-1', description: "AWS region.")
+    string(name: 'key_pair', defaultValue : 'spicysomtam-aws7', description: "EC2 instance ssh keypair.")
+  }
+
     agent any
     triggers {
         githubPush()
@@ -63,37 +73,60 @@ pipeline{
         //     }
 
         // }
-        stage("Initializing Terraform"){
+        stage("Create Setup for EKS, Kubectl") {
             steps{
-                dir('./terraform'){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform init'
-                    } 
-                }    
-            }
-        }
-        stage("Staging Plan for Infrastructures Job"){
-            steps{
-                dir("./terraform"){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform plan -out tfplan.binary'
-                        
-                        archiveArtifacts artifacts: 'tfplan.binary'
-                        
-                    } 
+                script {
+                    println "Getting the kubectl, eksctl binaries..."
+
+                    sh """
+                        # Installing eksctl
+                        ARCH=amd64
+                        PLATFORM=$(uname -s)_$ARCH
+                        curl -sLO "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+                        tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+
+                        # 'latest' kubectl is backward compatible with older api versions
+                        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                        rm -rf linux-amd64
+                        chmod u+x eksctl kubectl
+                        ls -l eksctl kubectl)
+                    """
+                    println "Checking jq is installed:"
+                    sh "which jq"
                 }
             }
         }
+        // stage("Initializing Terraform"){
+        //     steps{
+        //         dir('./terraform'){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform init'
+        //             } 
+        //         }    
+        //     }
+        // }
+        // stage("Staging Plan for Infrastructures Job"){
+        //     steps{
+        //         dir("./terraform"){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform plan -out tfplan.binary'
+                        
+        //                 archiveArtifacts artifacts: 'tfplan.binary'
+                        
+        //             } 
+        //         }
+        //     }
+        // }
         // stage("Check Financial Expense of Infrastructures Job with Infracost"){
         //     agent {
         //         docker {
@@ -142,21 +175,21 @@ pipeline{
         //         }
         //     }
         // }
-        stage("Staging Apply for Infrastructures Job"){
-            steps{
-                dir('./terraform'){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
-                        sh 'terraform apply -auto-approve tfplan.binary'
-                    } 
-                }    
-            }
-        }
+        // stage("Staging Apply for Infrastructures Job"){
+        //     steps{
+        //         dir('./terraform'){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
+        //                 sh 'terraform apply -auto-approve tfplan.binary'
+        //             } 
+        //         }    
+        //     }
+        // }
         // stage("Check for Destroy Infrastructure") {
         //     steps {
         //         input "Proceed with the Terraform Destroy Stage?"
