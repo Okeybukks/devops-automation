@@ -76,9 +76,9 @@ pipeline{
         stage("Create Setup for EKS, Kubectl") {
             steps{
                 script {
-                    sh "echo 'Getting the kubectl, eksctl binaries...'"
+                    println "Getting the kubectl, eksctl binaries..."
 
-                    sh """
+                    sh '''
                         # Installing eksctl
                         ARCH=amd64
                         PLATFORM=$(uname -s)_$ARCH
@@ -90,7 +90,7 @@ pipeline{
                         rm -rf linux-amd64
                         chmod u+x eksctl kubectl
                         ls -l eksctl kubectl)
-                    """
+                    '''
                     println "Checking jq is installed:"
                     sh "which jq"
                 }
