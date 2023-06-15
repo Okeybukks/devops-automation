@@ -69,11 +69,12 @@ resource "aws_route_table_association" "public_route_table_association" {
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.public_route_table.id
 
-  depends_on = [aws_route.public_route_table]
+  depends_on = [aws_route_table.public_route_table]
 }
 
 resource "aws_eip" "elastic-ip" {
-  vpc = true
+  domain   = "vpc"
+  depends_on = [aws_internet_gateway.igw]
 
   tags = {
     Name = "${var.prefix}-elastic-ip"
@@ -93,7 +94,7 @@ resource "aws_nat_gateway" "nat_gateway" {
 
 # Private route table Creation
 resource "aws_route_table" "private_route_table" {
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.altschool-capstone.id
 
   route {
     cidr_block      = "0.0.0.0/0"
