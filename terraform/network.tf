@@ -100,7 +100,7 @@ resource "aws_route_table" "private_route_table" {
     nat_gateway_id  = aws_nat_gateway.nat_gateway.id
   }
 
-  tags = = {
+  tags = {
     "Name" : "${var.prefix}-private-route-table"
   }
 }
