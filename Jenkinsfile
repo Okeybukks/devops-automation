@@ -159,10 +159,7 @@ pipeline{
         // }
         stage("Check for Destroy Infrastructure") {
             steps {
-                input {
-                    message "Do you wish to Destroy the Infrastructures?"
-                    ok "Yes"
-                    }
+                input "Proceed with the Terraform Destroy Stage?"
             }
         }
         stage("Destroy Infrastructures Job"){
@@ -174,8 +171,7 @@ pipeline{
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
-                        println "Infrastructure Destroyed"
-                        // sh 'terraform destroy -auto-approve'
+                        sh 'terraform destroy -auto-approve'
                     } 
                 }    
             }
