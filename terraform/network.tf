@@ -73,7 +73,7 @@ resource "aws_route_table_association" "public_route_table_association" {
 }
 
 resource "aws_eip" "elastic-ip" {
-  domain   = "vpc"
+  # domain   = "vpc"
   depends_on = [aws_internet_gateway.igw]
 
   tags = {
