@@ -2,7 +2,8 @@
 resource "aws_security_group" "eks-cluster" {
   name        = "${var.prefix}-eks-cluster-sg"
   description = "Security group for EKS cluster"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.altschool-capstone.id
+
 
   # Ingress rules
   ingress {
@@ -67,7 +68,7 @@ resource "aws_security_group" "worker_sg" {
 resource "aws_security_group" "bastion" {
   name        = "${var.prefix}-bastion"
   description = "Allow TLS inbound and outbound traffic for selected ports"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = aws_vpc.altschool-capstone.id
 
   ingress {
     description = "SSH to Instance"
@@ -106,8 +107,7 @@ resource "aws_security_group" "bastion" {
 resource "aws_security_group" "rds_sg" {
   name        = "${var.prefix}-security-group"
   description = "Security group for RDS database"
-
-  vpc_id = aws_vpc.main.id
+  vpc_id = aws_vpc.altschool-capstone.id
 
   # Ingress rule to allow incoming traffic on port 3306 from the EKS cluster security group
   ingress {
