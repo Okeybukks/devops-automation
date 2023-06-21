@@ -1,3 +1,4 @@
+
 resource "aws_db_subnet_group" "main" {
   name       = "${var.prefix}-db-subnet-gp"
   subnet_ids = [aws_subnet.private_subnet[0].id, aws_subnet.private_subnet[1].id]

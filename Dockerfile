@@ -26,4 +26,4 @@ RUN pip install -r requirements.txt
 # expose the port 8000
 EXPOSE 8000
 
-ENTRYPOINT [ "/scripts/entrypoint.sh" ]
+ENTRYPOINT [ "/scripts/entrypoint.sh"]

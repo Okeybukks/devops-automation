@@ -4,6 +4,7 @@ resource "aws_security_group" "eks-cluster" {
   description = "Security group for EKS cluster"
   vpc_id      = aws_vpc.altschool-capstone.id
 
+
   # Ingress rules
   ingress {
     from_port   = 443
@@ -106,7 +107,6 @@ resource "aws_security_group" "bastion" {
 resource "aws_security_group" "rds_sg" {
   name        = "${var.prefix}-security-group"
   description = "Security group for RDS database"
-
   vpc_id = aws_vpc.altschool-capstone.id
 
   # Ingress rule to allow incoming traffic on port 3306 from the EKS cluster security group
