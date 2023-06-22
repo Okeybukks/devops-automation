@@ -183,11 +183,11 @@ pipeline{
                             def elb_name = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text)'
                             def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --region $AWS_REGION --output text)'
 
-                            environment {
-                                ELB_NAME = elb_name
-                                ELB_DNSNAME = elb_dnsName
-                            }
-                            echo $ELB_NAME
+                            // environment {
+                            //     ELB_NAME = elb_name
+                            //     ELB_DNSNAME = elb_dnsName
+                            // }
+                            echo $elb_name
                        }
                     }
                 }
