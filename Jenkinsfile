@@ -179,7 +179,7 @@ pipeline{
                             sh 'kubectl apply -f postgres.yaml'
                             sh 'kubectl apply -f conduit-app.yaml'
 
-                            def elb_name = sh '$(aws eks describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --output text)'
+                            def elb_name = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --output text)'
                             def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --output text)'
 
                             environment {
@@ -207,8 +207,9 @@ pipeline{
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
                         script {
-                            echo "Hello World"
-                        // echo $ELB_NAME
+                        
+                            echo $ELB_NAME
+                            echo $ELB_DNSNAME
                         // aws elb delete-load-balancer --load-balancer-name $ELB_NAME
                         // kubectl delete all --all
                         // terraform destroy -auto-approve
