@@ -187,7 +187,7 @@ pipeline{
                                 ELB_NAME = elb_name
                                 ELB_DNSNAME = elb_dnsName
                             }
-                            echo ELB_NAME
+                            echo $ELB_NAME
                        }
                     }
                 }
