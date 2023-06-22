@@ -153,6 +153,10 @@ pipeline{
                     ]]){
                         copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
                         sh 'terraform apply -auto-approve tfplan.binary'
+
+                        def output = tfOutput(returnStdout: true, key: 'vpc_id')
+                        sh 'echo "VPC ID: ${output}"'
+
                     } 
                 }    
             }

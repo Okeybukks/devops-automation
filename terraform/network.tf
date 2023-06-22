@@ -72,45 +72,45 @@ resource "aws_route_table_association" "public_route_table_association" {
   depends_on = [aws_route_table.public_route_table]
 }
 
-resource "aws_eip" "elastic-ip" {
-  # domain   = "vpc"
-  depends_on = [aws_internet_gateway.igw]
+# resource "aws_eip" "elastic-ip" {
+#   # domain   = "vpc"
+#   depends_on = [aws_internet_gateway.igw]
 
-  tags = {
-    Name = "${var.prefix}-elastic-ip"
-  }
-}
+#   tags = {
+#     Name = "${var.prefix}-elastic-ip"
+#   }
+# }
 
-resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id = aws_eip.elastic-ip.id
-  subnet_id     = aws_subnet.public_subnet[0].id
+# resource "aws_nat_gateway" "nat_gateway" {
+#   allocation_id = aws_eip.elastic-ip.id
+#   subnet_id     = aws_subnet.public_subnet[0].id
 
-  tags = {
-    "Name" : "${var.prefix}-nat-gateway"
-  }
+#   tags = {
+#     "Name" : "${var.prefix}-nat-gateway"
+#   }
 
-  depends_on = [aws_internet_gateway.igw]
-}
+#   depends_on = [aws_internet_gateway.igw]
+# }
 
-# Private route table Creation
-resource "aws_route_table" "private_route_table" {
-  vpc_id            = aws_vpc.altschool-capstone.id
+# # Private route table Creation
+# resource "aws_route_table" "private_route_table" {
+#   vpc_id            = aws_vpc.altschool-capstone.id
 
-  route {
-    cidr_block      = "0.0.0.0/0"
-    nat_gateway_id  = aws_nat_gateway.nat_gateway.id
-  }
+#   route {
+#     cidr_block      = "0.0.0.0/0"
+#     nat_gateway_id  = aws_nat_gateway.nat_gateway.id
+#   }
 
-  tags = {
-    "Name" : "${var.prefix}-private-route-table"
-  }
-}
+#   tags = {
+#     "Name" : "${var.prefix}-private-route-table"
+#   }
+# }
 
-# Private route table association
-resource "aws_route_table_association" "private_route_table_association" {
-  count          = "${length(var.private_subnets_cidr)}"
-  subnet_id      = aws_subnet.private_subnet[count.index].id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# # Private route table association
+# resource "aws_route_table_association" "private_route_table_association" {
+#   count          = "${length(var.private_subnets_cidr)}"
+#   subnet_id      = aws_subnet.private_subnet[count.index].id
+#   route_table_id = aws_route_table.private_route_table.id
+# }
 
  

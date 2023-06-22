@@ -1,6 +1,6 @@
-output name {
-  value       = aws_db_instance.my_rds_db.endpoint
+output vpc_id {
+  value       = aws_vpc.altschool-capstone.id
   sensitive   = true
   description = "description"
-  depends_on  = [aws_db_instance.my_rds_db.id]
+  depends_on  = [aws_vpc.altschool-capstone]
 }
