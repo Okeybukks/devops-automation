@@ -17,6 +17,10 @@ spec:
       containers:
       - name: postgres
         image: achebeh/conduit-app:latest
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: 1
         env:
         - name: DJANGO_SECRET_KEY
           valueFrom:
@@ -24,10 +28,11 @@ spec:
               name: secrets
               key: django-secret
         - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: postgres-config
-              key: db-name
+          value: $(DB_NAME)
+          # valueFrom:
+          #   configMapKeyRef:
+          #     name: postgres-config
+          #     key: db-name
         - name: DB_USER
           valueFrom:
             secretKeyRef:

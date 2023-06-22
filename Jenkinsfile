@@ -63,37 +63,37 @@ pipeline{
         //     }
 
         // }
-        stage("Initializing Terraform"){
-            steps{
-                dir('./terraform'){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform init'
-                    } 
-                }    
-            }
-        }
-        stage("Staging Plan for Infrastructures Job"){
-            steps{
-                dir("./terraform"){
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "AWS_ID",
-                        accessKeyVariable: "AWS_ACCESS_KEY_ID",
-                        secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform plan -out tfplan.binary'
+        // stage("Initializing Terraform"){
+        //     steps{
+        //         dir('./terraform'){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform init'
+        //             } 
+        //         }    
+        //     }
+        // }
+        // stage("Staging Plan for Infrastructures Job"){
+        //     steps{
+        //         dir("./terraform"){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 sh 'terraform plan -out tfplan.binary'
                         
-                        archiveArtifacts artifacts: 'tfplan.binary'
+        //                 archiveArtifacts artifacts: 'tfplan.binary'
                         
-                    } 
-                }
-            }
-        }
+        //             } 
+        //         }
+        //     }
+        // }
         // stage("Check Financial Expense of Infrastructures Job with Infracost"){
         //     agent {
         //         docker {
@@ -142,28 +142,50 @@ pipeline{
         //         }
         //     }
         // }
-        stage("Staging Apply for Infrastructures Job"){
-            steps{
-                dir('./terraform'){
-                    withCredentials([[
+        // stage("Staging Apply for Infrastructures Job"){
+        //     steps{
+        //         dir('./terraform'){
+        //             withCredentials([[
+        //                 $class: 'AmazonWebServicesCredentialsBinding',
+        //                 credentialsId: "AWS_ID",
+        //                 accessKeyVariable: "AWS_ACCESS_KEY_ID",
+        //                 secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
+        //             ]]){
+        //                 copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
+        //                 sh 'terraform apply -auto-approve tfplan.binary'
+        //             } 
+        //         }    
+        //     }
+        // }
+        stage("Deploy Application to EKS clusterp") {
+            environment {
+                DB_NAME = credentials("DB_NAME")
+            }
+            steps {
+                    dir('./k8s') {
+                        withCredentials([[
                         $class: 'AmazonWebServicesCredentialsBinding',
                         credentialsId: "AWS_ID",
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')
-                        sh 'terraform apply -auto-approve tfplan.binary'
+                    ]])
+                    script {
+                        def clusterName = "group7-eks-cluster"
+                        aws eks update-kubeconfig --name clusterName --region "us-east-1"
+                        kubectl apply -f secrets.yaml
+                        kubectl apply -f postgres-configmap.yaml
+                        kubectl apply -f secrets.yaml
+                        kubectl apply -f conduit-apps.yaml
 
-                        script {
-                            def tfOutput = sh(script: 'terraform output -json', returnStdout: true).trim()
+                        def elb_name = $(aws eks describe-load-balancers --query 'LoadBalancerDescriptions[].LoadBalancerName' --output text)
+                        def elb_dnsName = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[].DNSName' --output text)
 
-                            def outputJson = readJSON(text: tfOutput)
-                            echo outputJson
-                            // def vpcID = outputJson.vpc_id.value
-                            // echo "VPC ID: ${vpcID}"
+                        environment {
+                            ELB_NAME = elb_name
+                            ELB_DNSNAME = elb_dnsName
                         }
-                    } 
-                }    
+                    }
+                    }
             }
         }
         stage("Check for Destroy Infrastructure") {
@@ -179,8 +201,12 @@ pipeline{
                         credentialsId: "AWS_ID",
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]]){
-                        sh 'terraform destroy -auto-approve'
+                    ]])
+                    script {
+                        echo $ELB_NAME
+                        // aws elb delete-load-balancer --load-balancer-name $ELB_NAME
+                        // kubectl delete all --all
+                        // terraform destroy -auto-approve
                     } 
                 }    
             }
