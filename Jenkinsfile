@@ -157,8 +157,10 @@ pipeline{
                         script {
                             def tfOutput = sh(script: 'terraform output -json', returnStdout: true).trim()
 
-                            // def output = tfOutput(returnStdout: true, key: 'vpc_id')
-                            echo "VPC ID: ${tfOutput}"
+                            def outputJson = readJSON(text: tfOutput)
+                            echo outputJson
+                            // def vpcID = outputJson.vpc_id.value
+                            // echo "VPC ID: ${vpcID}"
                         }
                     } 
                 }    
