@@ -155,8 +155,10 @@ pipeline{
                         sh 'terraform apply -auto-approve tfplan.binary'
 
                         script {
-                            def output = tfOutput(returnStdout: true, key: 'vpc_id')
-                            echo "VPC ID: ${output}"
+                            def tfOutput = sh(script: 'terraform output -json', returnStdout: true).trim()
+
+                            // def output = tfOutput(returnStdout: true, key: 'vpc_id')
+                            echo "VPC ID: ${tfOutput}"
                         }
                     } 
                 }    
