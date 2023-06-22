@@ -8,8 +8,8 @@ resource "aws_db_subnet_group" "main" {
 
 resource "aws_db_instance" "my_rds_db" {
   identifier             = "${var.prefix}-rds-db"
-  engine                 = "mysql"
-  engine_version         = "5.7"
+  engine                 = "postgres"
+  engine_version         = "12.15"
   instance_class         = "db.t2.micro"
   allocated_storage      = 20
   storage_type           = "gp2"

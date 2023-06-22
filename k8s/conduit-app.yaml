@@ -25,8 +25,8 @@ spec:
               key: django-secret
         - name: DB_NAME
           valueFrom:
-            secretKeyRef:
-              name: secrets
+            configMapKeyRef:
+              name: postgres-config
               key: db-name
         - name: DB_USER
           valueFrom:
@@ -50,11 +50,10 @@ kind: Service
 metadata:
   name: conduit-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: conduit-app
   ports:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-      nodePort: 30000

@@ -4,3 +4,4 @@ metadata:
   name: postgres-config
 data:
   postgres-url: postgres-service
+  db-name: conduit

@@ -73,7 +73,7 @@ resource "aws_security_group" "bastion" {
   ingress {
     description = "SSH to Instance"
     from_port   = 22
-    to_port     = 222
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -93,8 +93,8 @@ resource "aws_security_group" "bastion" {
   }
 
   egress {
-    from_port   = 3306
-    to_port     = 3306
+    from_port   = 5432
+    to_port     = 5432
     protocol    = "tcp"
     cidr_blocks = [aws_subnet.private_subnet[0].cidr_block, aws_subnet.private_subnet[1].cidr_block]
   }
@@ -109,10 +109,10 @@ resource "aws_security_group" "rds_sg" {
   description = "Security group for RDS database"
   vpc_id = aws_vpc.altschool-capstone.id
 
-  # Ingress rule to allow incoming traffic on port 3306 from the EKS cluster security group
+  # Ingress rule to allow incoming traffic on port 5432 from the EKS cluster security group
   ingress {
-    from_port       = 3306
-    to_port         = 3306
+    from_port       = 5432
+    to_port         = 5432
     protocol        = "tcp"
     security_groups = [aws_security_group.eks-cluster.id, aws_security_group.bastion.id]
   }
