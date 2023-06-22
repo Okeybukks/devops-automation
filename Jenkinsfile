@@ -160,6 +160,7 @@ pipeline{
         stage("Deploy Application to EKS clusterp") {
             environment {
                 DB_NAME = credentials("DB_NAME")
+                clusterName = "group7-eks-cluster"
             }
             steps {
                     dir('./k8s') {
@@ -170,12 +171,11 @@ pipeline{
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]])
                     script {
-                        def clusterName = "group7-eks-cluster"
                         sh 'aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"'
-                        kubectl apply -f secrets.yaml
-                        kubectl apply -f postgres-configmap.yaml
-                        kubectl apply -f secrets.yaml
-                        kubectl apply -f conduit-apps.yaml
+                        // kubectl apply -f secrets.yaml
+                        // kubectl apply -f postgres-configmap.yaml
+                        // kubectl apply -f secrets.yaml
+                        // kubectl apply -f conduit-apps.yaml
 
                         def elb_name = $(aws eks describe-load-balancers --query 'LoadBalancerDescriptions[].LoadBalancerName' --output text)
                         def elb_dnsName = $(aws elb describe-load-balancers --query 'LoadBalancerDescriptions[].DNSName' --output text)
