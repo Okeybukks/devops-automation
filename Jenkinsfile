@@ -169,23 +169,24 @@ pipeline{
                         credentialsId: "AWS_ID",
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]])
-                    script {
-                        sh 'aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"'
-                        // kubectl apply -f secrets.yaml
-                        // kubectl apply -f postgres-configmap.yaml
-                        // kubectl apply -f secrets.yaml
-                        // kubectl apply -f conduit-apps.yaml
+                    ]]){
+                        script {
+                            sh 'aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"'
+                            // kubectl apply -f secrets.yaml
+                            // kubectl apply -f postgres-configmap.yaml
+                            // kubectl apply -f secrets.yaml
+                            // kubectl apply -f conduit-apps.yaml
 
-                        // def elb_name = sh '$(aws eks describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --output text)'
-                        // def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --output text)'
+                            // def elb_name = sh '$(aws eks describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --output text)'
+                            // def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --output text)'
 
-                        environment {
-                            ELB_NAME = elb_name
-                            ELB_DNSNAME = elb_dnsName
-                        }
+                            // environment {
+                            //     ELB_NAME = elb_name
+                            //     ELB_DNSNAME = elb_dnsName
+                            // }
+                       }
                     }
-                    }
+                }
             }
         }
         stage("Check for Destroy Infrastructure") {
@@ -201,13 +202,16 @@ pipeline{
                         credentialsId: "AWS_ID",
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
-                    ]])
-                    script {
-                        echo $ELB_NAME
+                    ]]){
+                        script {
+                            echo "Hello World"
+                        // echo $ELB_NAME
                         // aws elb delete-load-balancer --load-balancer-name $ELB_NAME
                         // kubectl delete all --all
                         // terraform destroy -auto-approve
-                    } 
+                       } 
+                    }
+                    
                 }    
             }
 
