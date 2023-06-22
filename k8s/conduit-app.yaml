@@ -23,26 +23,13 @@ spec:
             cpu: 1
         env:
         - name: DJANGO_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: secrets
-              key: django-secret
+          value: $(DJANGO_SECRET_KEY)
         - name: DB_NAME
           value: $(DB_NAME)
-          # valueFrom:
-          #   configMapKeyRef:
-          #     name: postgres-config
-          #     key: db-name
         - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: secrets
-              key: db-user
+          value: $(DB_USER)
         - name: DB_PASS
-          valueFrom:
-            secretKeyRef:
-              name: secrets
-              key: db-password
+          value: $(DB_PASSWORD)
         - name: ALLOWED_HOSTS
           value: "*"
         - name: DB_HOST
