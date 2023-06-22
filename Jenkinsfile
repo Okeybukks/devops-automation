@@ -175,7 +175,7 @@ pipeline{
                             sh 'aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"'
                             sh 'kubectl apply -f secrets.yaml'
                             sh 'kubectl apply -f postgres-configmap.yaml'
-                            sh 'kubectl apply -f secrets.yaml'
+                            sh 'kubectl apply -f postgres.yaml'
                             sh 'kubectl apply -f conduit-apps.yaml'
 
                             // def elb_name = sh '$(aws eks describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --output text)'
