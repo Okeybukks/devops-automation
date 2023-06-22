@@ -172,7 +172,7 @@ pipeline{
                     ]]){
                         script {
                             echo "Hello World"
-                            // sh 'aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"'
+                            aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"
                             // kubectl apply -f secrets.yaml
                             // kubectl apply -f postgres-configmap.yaml
                             // kubectl apply -f secrets.yaml
