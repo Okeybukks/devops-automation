@@ -180,14 +180,17 @@ pipeline{
                             sh 'kubectl apply -f postgres.yaml'
                             sh 'kubectl apply -f conduit-app.yaml'
 
-                            def elb_name = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text)'
+                            def elb_name = sh (
+                                script: 'aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text',
+                                returnStdout: true
+                                ).trim()
                             // def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --region $AWS_REGION --output text)'
 
-                            // environment {
-                            //     ELB_NAME = elb_name
-                            //     ELB_DNSNAME = elb_dnsName
-                            // }
-                            echo $elb_name
+                            environment {
+                                ELB_NAME = elb_name
+                                // ELB_DNSNAME = elb_dnsName
+                            }
+                            echo $ELB_NAME
                        }
                     }
                 }
@@ -209,7 +212,7 @@ pipeline{
                     ]]){
                         script {
                             echo "Hello"
-                            // echo $ELB_NAME
+                            echo $ELB_NAME
                             // echo $ELB_DNSNAME
                         // aws elb delete-load-balancer --load-balancer-name $ELB_NAME
                         // kubectl delete all --all
