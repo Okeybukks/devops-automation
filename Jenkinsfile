@@ -164,6 +164,7 @@ pipeline{
                 DJANGO_SECRET_KEY = credentials("DJANGO_SECRET_KEY")
                 DB_USER = credentials("DB_USER")
                 DB_PASSWORD = credentials("DB_PASSWORD")
+                AWS_REGION = 'us-east-1'
             }
             steps {
                     dir('./k8s') {
@@ -179,8 +180,8 @@ pipeline{
                             sh 'kubectl apply -f postgres.yaml'
                             sh 'kubectl apply -f conduit-app.yaml'
 
-                            def elb_name = sh '$(aws elb describe-load-balancers --region "us-east-1" --query "LoadBalancerDescriptions[].LoadBalancerName" --output text)'
-                            def elb_dnsName = sh '$(aws elb describe-load-balancers --region "us-east-1" --query "LoadBalancerDescriptions[].DNSName" --output text)'
+                            def elb_name = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text)'
+                            def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --region $AWS_REGION --output text)'
 
                             environment {
                                 ELB_NAME = elb_name
