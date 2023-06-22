@@ -23,11 +23,11 @@ pipeline{
     triggers {
         githubPush()
     }
-    environment{
-        DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
-        TF_VAR_db_user = 'postgres'
-        TF_VAR_db_password = credentials("DB_PASSWORD")
-    }
+    // environment{
+    //     DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
+    //     TF_VAR_db_user = 'postgres'
+    //     TF_VAR_db_password = credentials("DB_PASSWORD")
+    // }
     stages{
         // stage("Run Application Test"){
         //     steps{
