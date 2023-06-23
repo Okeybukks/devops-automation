@@ -101,7 +101,7 @@ pipeline{
             steps{
                 dir('./terraform'){
                     sh 'echo "This is the financial check job"'
-                    copyArtifacts filter: 'infracost.json', fingerprintArtifacts: true, projectName: $JOB_BASE_NAME, selector: specific ('${BUILD_NUMBER}')    
+                    copyArtifacts filter: 'infracost.json', fingerprintArtifacts: true, projectName: '${JOB_BASE_NAME}', selector: specific ('${BUILD_NUMBER}')    
 
                     sh 'infracost comment github --path infracost.json --policy-path infracost-policy.rego \
                     --github-token $GITHUB_TOKEN --repo $GITHUB_REPO --commit $GIT_COMMIT'
@@ -117,7 +117,7 @@ pipeline{
                         accessKeyVariable: "AWS_ACCESS_KEY_ID",
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
-                        copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: $JOB_BASE_NAME, selector: specific ('${BUILD_NUMBER}')
+                        copyArtifacts filter: 'tfplan.binary', fingerprintArtifacts: true, projectName: '${JOB_BASE_NAME}', selector: specific ('${BUILD_NUMBER}')
                         sh 'terraform apply -auto-approve tfplan.binary'
                     } 
                 }    
