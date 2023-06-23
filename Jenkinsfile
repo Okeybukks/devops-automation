@@ -175,10 +175,15 @@ pipeline{
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
                         script {
-                            echo "Hello World"
-                            sh 'aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"'
-                            sh 'kubectl apply -f postgres.yaml'
-                            sh 'kubectl apply -f conduit-app.yaml'
+                            try {
+                                sh 'aws eks update-kubeconfig --name ${clusterName} --region "us-east-1"'
+                                sh 'kubectl apply -f postgres.yaml'
+                                sh 'kubectl apply -f conduit-app.yaml'
+                            }
+                            catch(error){
+                                sh 'kubectl apply -f postgres.yaml'
+                                sh 'kubectl apply -f conduit-app.yaml'
+                            }
 
                        }
                     }
