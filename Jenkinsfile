@@ -27,7 +27,7 @@ pipeline{
         // DOCKERHUB_CREDENTIAL = credentials("DOCKER_ID")
         // TF_VAR_db_user = 'postgres'
         // TF_VAR_db_password = credentials("DB_PASSWORD")
-        ELB_NAME = ''
+        AWS_REGION = 'us-east-1'
     }
     stages{
         // stage("Run Application Test"){
@@ -165,7 +165,6 @@ pipeline{
                 DJANGO_SECRET_KEY = credentials("DJANGO_SECRET_KEY")
                 DB_USER = credentials("DB_USER")
                 DB_PASSWORD = credentials("DB_PASSWORD")
-                AWS_REGION = 'us-east-1'
             }
             steps {
                     dir('./k8s') {
@@ -181,16 +180,6 @@ pipeline{
                             sh 'kubectl apply -f postgres.yaml'
                             sh 'kubectl apply -f conduit-app.yaml'
 
-                            def elb_name = sh (
-                                script: 'aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text',
-                                returnStdout: true
-                                ).trim()
-                            // def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --region $AWS_REGION --output text)'
-                            environment { 
-                                    ELB_NAME = elb_name
-                                }
-                            
-                            echo env.ELB_NAME
                        }
                     }
                 }
@@ -211,12 +200,13 @@ pipeline{
                         secretKeyVariable: "AWS_SECRET_ACCESS_KEY"
                     ]]){
                         script {
-                            echo "Hello"
-                            echo env.ELB_NAME
-                            // echo $ELB_DNSNAME
-                        // aws elb delete-load-balancer --load-balancer-name $ELB_NAME
-                        // kubectl delete all --all
-                        // terraform destroy -auto-approve
+                            def elb_name = sh (
+                                script: 'aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text',
+                                returnStdout: true
+                                ).trim()   
+                        aws elb delete-load-balancer --load-balancer-name $ELB_NAME
+                        kubectl delete all --all
+                        terraform destroy -auto-approve
                        } 
                     }
                     
