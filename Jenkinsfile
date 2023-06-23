@@ -9,7 +9,9 @@ pipeline{
     }
     stages{
         stage("test"){
-            sh 'echo $JOB_BASE_NAME'
+            steps{
+                sh 'echo $JOB_BASE_NAME'
+            }
         }
         // stage("Run Application Test"){
         //     steps{
