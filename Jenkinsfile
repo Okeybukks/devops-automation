@@ -185,9 +185,9 @@ pipeline{
                                 returnStdout: true
                                 ).trim()
                             // def elb_dnsName = sh '$(aws elb describe-load-balancers --query "LoadBalancerDescriptions[].DNSName" --region $AWS_REGION --output text)'
-                            env.ELB_NAME = elb_name
+                            // env.ELB_NAME = elb_name
                             
-                            echo $ELB_NAME
+                            echo elb_name
                        }
                     }
                 }
@@ -209,7 +209,7 @@ pipeline{
                     ]]){
                         script {
                             echo "Hello"
-                            echo $ELB_NAME
+                            // echo $ELB_NAME
                             // echo $ELB_DNSNAME
                         // aws elb delete-load-balancer --load-balancer-name $ELB_NAME
                         // kubectl delete all --all
