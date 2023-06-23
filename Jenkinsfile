@@ -21,7 +21,6 @@ pipeline{
         stage("Build and Push Application Image"){
             when {
                 expression {
-
                     return "$GIT_BRANCH == main"; 
                  }
             }
@@ -79,7 +78,6 @@ pipeline{
             steps{
                 dir("./terraform") {
                     sh 'echo "This is the financial check job"'
-                    copyArtifacts filter: 'plan.json', fingerprintArtifacts: true, projectName: 'test', selector: specific ('${BUILD_NUMBER}')     
                     sh 'infracost breakdown --path . --format json --out-file infracost.json'
                     archiveArtifacts artifacts: 'infracost.json'  
                 } 
