@@ -204,8 +204,12 @@ pipeline{
                                 script: 'aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text',
                                 returnStdout: true
                                 ).trim()
-
-                            def awsCommand = "aws elb delete-load-balancer --load-balancer-name ${elb_name}"
+                            try {
+                                def awsCommand = "aws elb delete-load-balancer --load-balancer-name ${elb_name}"
+                            }
+                            catch(error){
+                                echo "No loadbalancer to delete."
+                            }
 
                             sh awsCommand
                             sh 'kubectl delete all --all'
