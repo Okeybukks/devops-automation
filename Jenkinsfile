@@ -204,8 +204,8 @@ pipeline{
                                 script: 'aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text',
                                 returnStdout: true
                                 ).trim()
-                            echo elb_name
-                            aws eks list-clusters
+                            sh 'echo elb_name'
+                            // aws eks list-clusters
 
                         }
                             sh 'echo $elb_name'
