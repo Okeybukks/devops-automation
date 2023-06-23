@@ -206,12 +206,11 @@ pipeline{
                                 ).trim()
                             try {
                                 def awsCommand = "aws elb delete-load-balancer --load-balancer-name ${elb_name}"
+                                sh awsCommand
                             }
                             catch(error){
                                 echo "No loadbalancer to delete."
                             }
-
-                            sh awsCommand
                             sh 'kubectl delete all --all'
                             sh 'terraform init -upgrade'
                             sh 'terraform destroy -auto-approve'
