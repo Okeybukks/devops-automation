@@ -205,17 +205,13 @@ pipeline{
                                 returnStdout: true
                                 ).trim()
 
-                            def awsCommand = "aws elb describe-load-balancers --load-balancer-name ${elb_name}"
+                            def awsCommand = "aws elb delete-load-balancer --load-balancer-name ${elb_name}"
 
                             sh awsCommand
-                            // aws eks list-clusters
+                            sh 'kubectl delete all --all'
+                            sh 'terraform destroy -auto-approve'
 
-                        }
-                            
-                            // sh 'aws elb delete-load-balancer --load-balancer-name elb_name'
-                            // sh 'kubectl delete all --all'
-                            // sh 'terraform destroy -auto-approve'
-                    
+                        }                   
                     }
                     
                 }    
