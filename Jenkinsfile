@@ -209,6 +209,7 @@ pipeline{
 
                             sh awsCommand
                             sh 'kubectl delete all --all'
+                            sh 'terraform init -upgrade'
                             sh 'terraform destroy -auto-approve'
 
                         }                   
