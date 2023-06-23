@@ -205,6 +205,8 @@ pipeline{
                                 returnStdout: true
                                 ).trim()
                             echo elb_name
+                            aws eks list-clusters
+
                         }
                             sh 'echo $elb_name'
                             sh 'echo elb_name'
