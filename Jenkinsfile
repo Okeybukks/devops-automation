@@ -204,9 +204,9 @@ pipeline{
                                 script: 'aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text',
                                 returnStdout: true
                                 ).trim()   
-                        aws elb delete-load-balancer --load-balancer-name $ELB_NAME
-                        kubectl delete all --all
-                        terraform destroy -auto-approve
+                            sh 'aws elb delete-load-balancer --load-balancer-name elb_name'
+                            sh 'kubectl delete all --all'
+                            sh 'terraform destroy -auto-approve'
                        } 
                     }
                     
