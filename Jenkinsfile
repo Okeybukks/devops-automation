@@ -205,7 +205,7 @@ pipeline{
                                 returnStdout: true
                                 ).trim()
 
-                            def awsCommand = "aws elb describe-load-balancers --load-balancer-name ${elbName}"
+                            def awsCommand = "aws elb describe-load-balancers --load-balancer-name ${elb_name}"
 
                             sh awsCommand
                             // aws eks list-clusters
