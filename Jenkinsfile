@@ -203,12 +203,14 @@ pipeline{
                             def elb_name = sh (
                                 script: 'aws elb describe-load-balancers --query "LoadBalancerDescriptions[].LoadBalancerName" --region $AWS_REGION --output text',
                                 returnStdout: true
-                                ).trim()  
-                            sh 'echo ${elb_name}' 
+                                ).trim()
+                        }
+                            sh 'echo $elb_name'
+                            sh 'echo elb_name'
                             // sh 'aws elb delete-load-balancer --load-balancer-name elb_name'
                             // sh 'kubectl delete all --all'
                             // sh 'terraform destroy -auto-approve'
-                       } 
+                    
                     }
                     
                 }    
