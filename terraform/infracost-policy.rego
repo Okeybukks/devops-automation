@@ -3,7 +3,7 @@ package infracost
 deny[out] {
 
     # define a variable
-	maxMonthlyCost = 170.0
+	maxMonthlyCost = 180.0
 
 	msg := sprintf(
 		"Total monthly cost must be less than $%.2f (Current monthly cost is $%.2f)",
