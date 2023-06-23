@@ -5,7 +5,6 @@ def dbPassword = credentials("DB_PASSWORD")
 def dbPort = 5432
 def allowedHosts = credentials("ALLOWED_HOSTS")
 
-
 def envFilePath = "temp_env.list"
 def envFileContent = """
     DJANGO_SECRET_KEY=$djangoSecretKey\n
