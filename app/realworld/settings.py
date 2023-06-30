@@ -88,7 +88,7 @@ DATABASES = {
         'HOST': os.environ.get('DB_HOST'),
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
     },
     # "mysql": {
     #     'ENGINE': 'django.db.backends.mysql',
@@ -145,3 +145,11 @@ AUTH_USER_MODEL = "accounts.User"
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
+
+CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS.extend(
+    filter(None, os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(','))
+)
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False

@@ -13,7 +13,7 @@ services:
       - DB_HOST=db
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASSWORD}
+      - DB_PASSWORD=${DB_PASSWORD}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
     depends_on:

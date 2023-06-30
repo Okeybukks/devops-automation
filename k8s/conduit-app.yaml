@@ -20,20 +20,21 @@ spec:
         resources:
           limits:
             memory: "1Gi"
-            cpu: 1
+            cpu: '1'
         env:
         - name: DJANGO_SECRET_KEY
-          value: $(DJANGO_SECRET_KEY)
+          value: changeme
         - name: DB_NAME
-          value: $(DB_NAME)
+          value: postgres
         - name: DB_USER
-          value: $(DB_USER)
+          value: postgres
         - name: DB_PASS
-          value: $(DB_PASSWORD)
+          value: postgres
         - name: ALLOWED_HOSTS
           value: "*"
         - name: DB_HOST
           value: postgres-service
+        
         ports:
         - containerPort: 8000
 ---
