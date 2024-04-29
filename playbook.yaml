@@ -1,0 +1,10 @@
+---
+- name: Update web servers
+  hosts: webservers
+  become: true
+
+  tasks:
+  - name: Create temporary file
+    tempfile:
+      state: file
+      suffix: temp_achebe
