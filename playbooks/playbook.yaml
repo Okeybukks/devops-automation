@@ -35,7 +35,7 @@
     when: "'master' in group_names"
 
   - set_fact:
-      microk8s_join1: "{{ token.stdout}}"
+      microk8s_join1: "{{ token.stdout }}"
     when: "'master' in group_names"
 
   - debug:
