@@ -9,6 +9,11 @@
       upgrade: yes
       update_cache: yes
 
+  - name: Install snap package installer
+    apt:
+      name: snapd
+      state: present
+
   - name: Instal Microk8s
     snap:
       name: microk8s
