@@ -9,23 +9,23 @@
       upgrade: yes
       update_cache: yes
 
-  # - name: Instal Microk8s
-  #   snap:
-  #     name: microk8s
-  #     classic: true
+  - name: Instal Microk8s
+    snap:
+      name: microk8s
+      classic: true
 
-  # - name: Add current user to microk8s group
-  #   shell:
-  #     cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
+  - name: Add current user to microk8s group
+    shell:
+      cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
 
-  # - name: Create join node command
-  #   command: microk8s add-node
-  #   delegate_to: "{{ groups['master'][0] }}"
-  #   register: token
-  #   ignore_errors: true
+  - name: Create join node command
+    command: microk8s add-node
+    delegate_to: "{{ groups['master'][0] }}"
+    register: token
+    ignore_errors: true
 
-  # - set_fact:
-  #     microk8s-join: "{{ token.stdout }}"
+  - set_fact:
+      microk8s-join: "{{ token.stdout }}"
 
-  # - debug:
-  #   var: microk8s_join
+  - debug:
+    var: microk8s_join
