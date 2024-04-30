@@ -42,7 +42,7 @@
   #   when: "'workers' in group_names"
 
    - debug:
-      var: microk8s_join
+       var: microk8s_join
     # when: "'master' in group_names"
 
 # - hosts: "workers"
