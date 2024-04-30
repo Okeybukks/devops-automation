@@ -24,14 +24,14 @@
       cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
 
   - name: Create join node command
-    command: microk8s add-node
+    shell: microk8s add-node
     delegate_to: "{{ groups['master'][0] }}"
     register: token
     ignore_errors: true
     when: "'master' in group_names"
 
   - set_fact:
-      microk8s-join: "{{ token..stdout }}"
+      microk8s-join: "{{ token.stdout }}"
     when: "'master' in group_names"
 
   - debug:
