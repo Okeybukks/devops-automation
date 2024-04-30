@@ -38,11 +38,22 @@
   - debug:
       var: microk8s_join
 
-  - name: Join worker node to cluster
-    shell: "{{ microk8s_join }}"
-    delegate_to: "{{ item }}"
-    loop: "{{ groups['workers'] }}"
-    when: "'workers' in group_names"
+  # - name: Join worker node to cluster
+  #   shell: "{{ microk8s_join }}"
+  #   delegate_to: "{{ item }}"
+  #   loop: "{{ groups['workers'] }}"
+  #   when: "'workers' in group_names"
+
+- name: "Execute the join command in a worker node"
+  hosts: "workers"
+  become: true
+  tasks:
+    - name: "Debug: Printing the join command"
+      debug:
+        var: hostvars['master']['microk8s_join']
+
+    # - name: "Join the cluster from the generated join command"
+    #   command: "{{ hostvars['K8S_JOIN_HOLDER']['command'] }}"
 
    
     # when: "'master' in group_names"
