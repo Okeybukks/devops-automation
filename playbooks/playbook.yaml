@@ -25,7 +25,7 @@
     ignore_errors: true
 
   - set_fact:
-      microk8s-join: "{{ token.stdout }}"
+      microk8s_join: "{{ token.stdout }}"
 
   - debug:
       var: microk8s_join
