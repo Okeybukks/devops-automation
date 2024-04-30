@@ -34,14 +34,13 @@
       microk8s_join: "{{ token.stdout_lines[4] }}"
     when: "'master' in group_names"
 
-  - set_fact:
-      microk8s_join1: "{{ token.stdout_lines[3] }}"
-    when: "'master' in group_names"
-
   - debug:
       var: microk8s_join
     when: "'master' in group_names"
 
   - debug:
-      var: microk8s_join1
-    when: "'master' in group_names"
+      var: "{{ hostvars['master']['microk8s_join'] }}"
+
+  # - name: Join worker node to cluster
+  #   shell: "{{ hostvars['master']['microk8s_join'] }}"
+    
