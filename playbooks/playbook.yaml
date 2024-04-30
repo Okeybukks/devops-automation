@@ -35,12 +35,8 @@
   - set_fact:
       microk8s_join: "{{ token.stdout_lines[4] }}"
 
-# - debug:
-#     var: microk8s_join
-#   when: "'master' in group_names"
-
   - name: Join worker node to cluster
-    shell: {{ microk8s_join }}
+    shell: "{{ microk8s_join }}"
     delegate_to: "{{ item }}"
     loop: "{{ groups['workers'] }}"
     when: "'workers' in group_names"
