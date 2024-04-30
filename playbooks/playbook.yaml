@@ -38,10 +38,6 @@
       microk8s_join1: "{{ token.stdout}}"
     when: "'master' in group_names"
 
-  - set_fact:
-      microk8s_join2: "{{ token.stdout_lines[4].stdout }}"
-    when: "'master' in group_names"
-
   - debug:
       var: "{{ microk8s_join }}"
     when: "'master' in group_names"
@@ -50,9 +46,6 @@
       var: "{{ microk8s_join1 }}"
     when: "'master' in group_names"
 
-  - debug:
-      var: "{{ microk8s_join2 }}"
-    when: "'master' in group_names"
 
   # - name: Join worker node to cluster
   #   shell: "{{ microk8s_join }}"
