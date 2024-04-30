@@ -28,4 +28,4 @@
       microk8s-join: "{{ token.stdout }}"
 
   - debug:
-    var: microk8s_join
+      var: microk8s_join
