@@ -38,9 +38,9 @@
       var: microk8s_join
     when: "'master' in group_names"
 
-  - debug:
-      var: microk8s_join[0]
-
-  # - name: Join worker node to cluster
-  #   shell: "{{ hostvars['master']['microk8s_join'] }}"
+  - name: Join worker node to cluster
+    shell: "{{ microk8s_join }}"
+    delegate_to: "{{ groups['workers'] }}"
+    when: "'workers' in group_names"
+    
     
