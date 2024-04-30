@@ -4,7 +4,7 @@
   become: true
 
   tasks:
-  - name: Update nodes
+  - name: Update web servers
     apt:
       upgrade: yes
       update_cache: yes
@@ -28,9 +28,12 @@
     delegate_to: "{{ groups['master'][0] }}"
     register: token
     ignore_errors: true
+    when: "'master' in group_names"
 
   - set_fact:
-      microk8s_join: "{{ token.stdout }}"
+      microk8s-join: "{{ token..stdout }}"
+    when: "'master' in group_names"
 
   - debug:
       var: microk8s_join
+    when: "'master' in group_names"
