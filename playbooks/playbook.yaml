@@ -24,7 +24,7 @@
       cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
 
   - name: Create join node command
-    shell: microk8s add-node
+    shell: /snap/bin/microk8s add-node
     delegate_to: "{{ groups['master'][0] }}"
     register: token
     ignore_errors: true
