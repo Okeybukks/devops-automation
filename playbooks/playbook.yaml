@@ -41,7 +41,7 @@
   - name: "Add K8S join command to a dummy host"
     add_host:
       name: "K8S_JOIN_HOLDER"
-      command: "{{ microk8s_join }}"
+      command: "{{ '/snap/bin/' + microk8s_join }}"
 
   # - name: Join worker node to cluster
   #   shell: "{{ microk8s_join }}"
@@ -57,8 +57,8 @@
       debug:
         var: hostvars['K8S_JOIN_HOLDER']['command']
 
-    - name: "Join the cluster from the generated join command"
-      command: "{{ hostvars['K8S_JOIN_HOLDER']['command'] }}"
+    # - name: "Join the cluster from the generated join command"
+    #   command: "{{ hostvars['K8S_JOIN_HOLDER']['command'] }}"
 
    
     # when: "'master' in group_names"
