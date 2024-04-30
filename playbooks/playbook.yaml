@@ -1,7 +1,6 @@
 ---
 - name: Update web servers
   hosts: webservers
-  gather_facts: False
   become: true
 
   tasks:
