@@ -14,7 +14,7 @@
       name: snapd
       state: present
 
-  - name: Instal Microk8s
+  - name: Install Microk8s
     snap:
       name: microk8s
       classic: true
@@ -31,7 +31,7 @@
     when: "'master' in group_names"
 
   - set_fact:
-      microk8s_join: "{{ token.stdout }}"
+      microk8s_join: "{{ token.stdout_lines[2] }}"
     when: "'master' in group_names"
 
   - debug:
