@@ -12,7 +12,7 @@
 
     - name: Set facts for each join token
       set_fact:
-        microk8s_join_tokens: "{{ join_tokens.stdout_lines[4] }}"
+        microk8s_join_tokens: "{{ join_tokens.results }}"
 
     - debug:
         var: microk8s_join_tokens
