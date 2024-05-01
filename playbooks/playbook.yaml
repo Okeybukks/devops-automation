@@ -1,73 +1,20 @@
 ---
-- name: Update servers
-  hosts: kubenodes
-  become: true
-
-  tasks:
-  - name: Update web servers
-    apt:
-      upgrade: yes
-      update_cache: yes
-
-  - name: Install snap package installer
-    apt:
-      name: snapd
-      state: present
-
-  - name: Install Microk8s
-    snap:
-      name: microk8s
-      classic: true
-
-  - name: Add current user to microk8s group
-    shell:
-      cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
-
 - hosts: "master"
   become: true
   tasks:
-    
-  - name: Create join node command
-    shell: /snap/bin/microk8s add-node
-    register: token
-    ignore_errors: true
+    - name: Create join node command
+      shell: /snap/bin/microk8s add-node
+      register: join_tokens
+      ignore_errors: true
+      loop: "{{ range(1, num_iterations|int + 1) | list }}"
+      vars:
+        num_iterations: 3
 
-  - set_fact:
-      microk8s_join: "{{ token.stdout_lines[4] }}"
+    - name: Set facts for each join token
+      set_fact:
+        microk8s_join_{{ loop.index }}: "{{ item.stdout_lines[4] }}"
+      loop: "{{ join_tokens.results }}"
 
-  - debug:
-      var: microk8s_join
-
-  - name: "Add K8S join command to a dummy host"
-    add_host:
-      name: "K8S_JOIN_HOLDER"
-      command: "{{ '/snap/bin/' + microk8s_join }}"
-
-  # - name: Join worker node to cluster
-  #   shell: "{{ microk8s_join }}"
-  #   delegate_to: "{{ item }}"
-  #   loop: "{{ groups['workers'] }}"
-  #   when: "'workers' in group_names"
-
-- name: "Execute the join command in a worker node"
-  hosts: "workers"
-  become: true
-  tasks:
-    - name: "Debug: Printing the join command"
-      debug:
-        var: hostvars['K8S_JOIN_HOLDER']['command']
-
-    - name: "Join the cluster from the generated join command"
-      command: "{{ hostvars['K8S_JOIN_HOLDER']['command'] }}"
-
-   
-    # when: "'master' in group_names"
-
-# - hosts: "workers"
-#   become: true
-#   tasks:
-
-#   - name: Join cluster
-#     shell: "{{ hostvars['kubenodes']['microk8s_join'] }}"
-    
-    
+    - debug:
+        var: "microk8s_join_{{ loop.index }}"
+        loop: "{{ join_tokens.results }}"
