@@ -12,9 +12,8 @@
 
     - name: Set facts for each join token
       set_fact:
-        microk8s_join_{{ loop.index }}: "{{ item.stdout_lines[4] }}"
-      loop: "{{ join_tokens.results }}"
+        microk8s_join_tokens: "{{ join_tokens.results }}"
 
     - debug:
-        var: "microk8s_join_{{ loop.index }}"
-        loop: "{{ join_tokens.results }}"
+        var: microk8s_join_tokens
+  
