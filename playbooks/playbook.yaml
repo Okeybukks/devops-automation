@@ -6,8 +6,10 @@
     vars:
       mylist: [1,2,3]
     set_fact:
-      "variable{{ loop.index }}": "{{ item }}"
+      "variable{{ my_idx }}": "{{ item }}"
     loop: "{{ mylist }}"
+    loop_control:
+      index_var: my_idx
     # - name: Create join node command
     #   shell: /snap/bin/microk8s add-node
     #   register: join_tokens
