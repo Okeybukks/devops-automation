@@ -1,30 +1,34 @@
 ---
-- name: Ansible playbook to create Microk8s Cluster
-  hosts: kubenodes
+# - name: Ansible playbook to create Microk8s Cluster
+#   hosts: kubenodes
+#   become: true
+
+#   tasks:
+
+#   - name: Update web servers
+#     apt:
+#       upgrade: yes
+#       update_cache: yes
+
+#   - name: Install snap package installer
+#     apt:
+#       name: snapd
+#       state: present
+
+  # - name: Install Microk8s
+  #   snap:
+  #     name: microk8s
+  #     classic: true
+
+  # - name: Add current user to microk8s group
+  #   shell:
+  #     cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
+
+- hosts: "master"
   become: true
   vars:
     workers_count: "{{ groups.workers | length }}"
-
-  tasks:
-
-  - name: Update web servers
-    apt:
-      upgrade: yes
-      update_cache: yes
-
-  - name: Install snap package installer
-    apt:
-      name: snapd
-      state: present
-
-  - name: Install Microk8s
-    snap:
-      name: microk8s
-      classic: true
-
-  - name: Add current user to microk8s group
-    shell:
-      cmd: "sudo usermod -a -G microk8s {{ ansible_user }}" 
+  tasks:   
 
   - name: Create join node command
     shell: /snap/bin/microk8s add-node
@@ -33,37 +37,31 @@
     loop: "{{ range(1, num_iterations|int + 1 ) | list }}"
     vars:
       num_iterations: "{{ workers_count }}"
-    delegate_to: "{{ groups.master[0] }}"
 
   - set_fact:
       microk8s_join_list: "{{ microk8s_join_list | default([]) + ['/snap/bin/' + item.stdout_lines[4]] }}"
     loop: "{{ join_token.results }}"
     loop_control:
       index_var: my_idx
-    delegate_to: "{{ groups.master[0] }}"
 
   # - name: Add Cluster dashboard, Ingress and Cert Manager addon
   #   shell: /snap/bin/microk8s enable community ingress dashboard cert-manager 
-  #   delegate_to: "{{ groups.master[0] }}"
 
   # - name: Add Argocd addon
   #   shell: /snap/bin/microk8s enable argocd
-  #   delegate_to: "{{ groups.master[0] }}"
         
   # - name: Store dashboard token
   #   shell: /snap/bin/microk8s kubectl create token default
   #   register: dashboard_token
   #   ignore_errors: true
-  #   delegate_to: "{{ groups.master[0] }}"
 
   # - name: Save Kubernetes dashboard token
   #   set_fact:
   #     dashboard_token: "{{ dashboard_token.stdout }}"
-  #   delegate_to: "{{ groups.master[0] }}"
 
   - name: Run command on worker nodes
     shell: "{{ item[my_idx] }}"
-    delegate_to: "{{ groups.workers[my_idx] }}"
+    delegate_to: "{{ groups.workers[0] }}"
     loop: "{{ microk8s_join_list }}"
     loop_control:
       index_var: my_idx
