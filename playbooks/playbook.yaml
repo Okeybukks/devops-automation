@@ -8,7 +8,7 @@
   tasks:
   - name: worker count
     set_fact:
-      ip_count: "{{ griups.all | map('extract', hostvars, ['ansible_host'])}}"
+      ip_count: "{{ groups.all | map('extract', hostvars, ['ansible_host'])}}"
 
   - debug:
       msg: "{{ ip_count }}"
