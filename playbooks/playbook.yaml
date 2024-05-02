@@ -22,12 +22,18 @@
       num_iterations: "{{ workers_count }}"
 
   - set_fact:
-      "microk8s_join_{{ my_idx }}": "{{ join_token.results[my_idx].stdout_lines[4] }}"
+      "microk8s_join_{{ my_idx }}": "/snap/bin/microk8s + {{ join_token.results[my_idx].stdout_lines[4] }}"
     loop: "{{ join_token.results }}"
     loop_control:
       index_var: my_idx
 
 
   - debug:
-      msg: "{{ microk8s_join_1 }} : {{ microk8s_join_2 }} : {{ microk8s_join_0 }}"
+      msg: "{{ microk8s_join_1 }} : {{ microk8s_join_0 }}"
+
+  # - name: Run command on worker nodes
+  #   loop: "{{ range(1, num_iterations|int + 1 ) | list }}"
+  #   vars:
+  #     num_iterations: "{{ workers_count }}"
+  #   shell: 
 
