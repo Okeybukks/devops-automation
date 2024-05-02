@@ -8,7 +8,7 @@
   tasks:
   - name: worker count
     set_fact:
-      ip_count: "{{ groups["workers"] | unique | length }}"
+      ip_count: "{{ groups }}"
 
   - debug:
       msg: "{{ ip_count }}"
