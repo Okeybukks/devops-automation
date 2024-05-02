@@ -49,10 +49,10 @@
   - set_fact:
       dashboard_token: {{ dashboard_token.stdout }}
 
-  - name: Send token to vault
-    copy:
-      content: "{{ dashboard_token }}"
-      dest: "~/token.txt"
+  # - name: Send token to vault
+  #   copy:
+  #     content: "{{ dashboard_token }}"
+  #     dest: "~/token.txt"
 
   - name: "Add K8S join command to a dummy host"
     add_host:
