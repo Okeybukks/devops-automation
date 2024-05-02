@@ -2,74 +2,10 @@
 - name: Update servers
   hosts: kubenodes
   become: true
+  vars:
+    numbers: [1,2,3]
 
   tasks:
   - name: Update web servers
-    apt:
-      upgrade: yes
-      update_cache: yes
-
-  - name: Install snap package installer
-    apt:
-      name: snapd
-      state: present
-
-  - name: Install Microk8s
-    snap:
-      name: microk8s
-      classic: true
-
-  - name: Add current user to microk8s group
-    shell:
-      cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
-
-- hosts: "master"
-  become: true
-  tasks:
-    
-  - name: Create join node command
-    shell: /snap/bin/microk8s add-node
-    register: join_token
-    ignore_errors: true
-
-  - set_fact:
-      microk8s_join: "{{ join_token.stdout_lines[4] }}"
-
-  - name: Add Cluster dashboard, Ingress and Cert Manager addon
-    shell: /snap/bin/microk8s enable community ingress dashboard cert-manager 
-
-  - name: Add Argocd addon
-    shell: /snap/bin/microk8s enable argocd
-        
-  - name: Store dashboard token
-    shell: /snap/bin/microk8s kubectl create token default
-    register: dashboard_token
-    ignore_errors: true
-
-  - set_fact:
-      dashboard_token: "{{ dashboard_token.stdout }}"
-
-  # - name: Send token to vault
-  #   copy:
-  #     content: "{{ dashboard_token }}"
-  #     dest: "~/token.txt"
-
-  - name: "Add K8S join command to a dummy host"
-    add_host:
-      name: "K8S_JOIN_HOLDER"
-      command: "{{ '/snap/bin/' + microk8s_join }}"
-
-- name: "Execute the join command in a worker node"
-  hosts: "workers"
-  become: true
-  tasks:
-    - name: "Debug: Printing the join command"
-      debug:
-        var: hostvars['K8S_JOIN_HOLDER']['command']
-
-    - name: "Join the cluster from the generated join command"
-      command: "{{ hostvars['K8S_JOIN_HOLDER']['command'] }}"
-
-
-
-  
+    with_items: "{{ numbers }}"
+    set_fact
