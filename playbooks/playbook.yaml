@@ -10,7 +10,8 @@
     loop: "{{ mylist }}"
     loop_control:
       index_var: my_idx
-    debug:
+      
+  - debug:
       var: "variable{{ my_idx }}"
 
     
