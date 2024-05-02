@@ -10,3 +10,7 @@
     with_items: "{{ numbers }}"
     set_fact:
       "variable_{{ item }}": "{{ item }}"
+
+  - debug:
+      msg: "variable_{{ item }}"
+     with_items: "{{ numbers }}"
