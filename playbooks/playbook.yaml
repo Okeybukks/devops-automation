@@ -22,7 +22,7 @@
       num_iterations: "{{ ip_count }}"
 
   - set_fact:
-      microk8s_join: "{{ join_token.results[0]["stdout_lines"][4] }}"
+      microk8s_join: "{{ join_token.results[0].stdout_lines }}"
 
   - debug:
       msg: "{{ microk8s_join }}"
