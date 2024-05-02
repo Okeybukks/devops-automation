@@ -17,7 +17,7 @@
     shell: /snap/bin/microk8s add-node
     register: join_token
     ignore_errors: true
-    loop: "{{ range(0, num_iterations|int ) | list }}"
+    loop: "{{ range(1, num_iterations|int + 1 ) | list }}"
       vars:
         num_iterations: "{{ ip_count }}"
 
