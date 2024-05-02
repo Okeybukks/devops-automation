@@ -8,7 +8,7 @@
   tasks:
   - name: worker count
     set_fact:
-      ip_count: "{{ groups.all | map('extract', hostvars, ['ansible_host'])}}"
+      ip_count: "{{ groups.all }}"
 
   - debug:
       msg: "{{ ip_count }}"
@@ -21,11 +21,11 @@
   # - set_fact:
   #     microk8s_join: "{{ join_token.stdout_lines[4] }}"
 
-  - name: Update web servers
-    with_items: "{{ numbers }}"
-    set_fact:
-      "variable_{{ item }}": "{{ item }}"
+  # - name: Update web servers
+  #   with_items: "{{ numbers }}"
+  #   set_fact:
+  #     "variable_{{ item }}": "{{ item }}"
 
-  - debug:
-      msg: "{variable_{{ item }}:{{ item }}}"
-    with_items: "{{ numbers }}"
+  # - debug:
+  #     msg: "{variable_{{ item }}:{{ item }}}"
+  #   with_items: "{{ numbers }}"
