@@ -1,6 +1,6 @@
 ---
 - name: Update servers
-  hosts: kubenodes
+  hosts: master
   become: true
   vars:
     numbers: [1,2,3]
