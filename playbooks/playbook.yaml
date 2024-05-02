@@ -8,18 +8,24 @@
   tasks:
   - name: worker count
     set_fact:
-      ip_count: "{{ groups.all | length }}"
+      ip_count: "{{ groups.all | unique | length }}"
 
   - debug:
       msg: "{{ ip_count }}"
 
-  # - name: Create join node command
-  #   shell: /snap/bin/microk8s add-node
-  #   register: join_token
-  #   ignore_errors: true
+  - name: Create join node command
+    shell: /snap/bin/microk8s add-node
+    register: join_token
+    ignore_errors: true
+    loop: "{{ range(0, num_iterations|int ) | list }}"
+      vars:
+        num_iterations: "{{ ip_count }}"
 
-  # - set_fact:
-  #     microk8s_join: "{{ join_token.stdout_lines[4] }}"
+  - set_fact:
+      microk8s_join: "{{ join_token.results }}"
+
+  - debug:
+      msg: "{{ microk8s_join }}"
 
   # - name: Update web servers
   #   with_items: "{{ numbers }}"
