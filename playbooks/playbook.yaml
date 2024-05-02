@@ -47,7 +47,7 @@
     ignore_errors: true
 
   - set_fact:
-      dashboard_token: {{ dashboard_token.stdout }}
+      dashboard_token: "{{ dashboard_token.stdout }}"
 
   # - name: Send token to vault
   #   copy:
