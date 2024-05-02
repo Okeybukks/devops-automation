@@ -2,15 +2,12 @@
 - hosts: "master"
   become: true
   tasks:
-  -  name: Assign list elements to variables dynamically
-     hosts: your_host_group
-     tasks:
-      - name: Assign elements of the list to variables dynamically
-        vars:
-          mylist: [1,2,3]
-          set_fact:
-            "variable{{ loop.index }}": "{{ item }}"
-          loop: "{{ mylist }}"
+  - name: Assign elements of the list to variables dynamically
+    vars:
+      mylist: [1,2,3]
+      set_fact:
+        "variable{{ loop.index }}": "{{ item }}"
+      loop: "{{ mylist }}"
     # - name: Create join node command
     #   shell: /snap/bin/microk8s add-node
     #   register: join_tokens
