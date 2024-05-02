@@ -63,6 +63,8 @@
     # shell: "{{ item[my_idx] }}"
     delegate_to: "{{ groups.workers[0] }}"
     loop: "{{ microk8s_join_list }}"
+    loop_control:
+      extended: true
     # loop_control:
     #   index_var: my_idx
     debug:
