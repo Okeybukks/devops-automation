@@ -6,6 +6,21 @@
     numbers: [1,2,3]
 
   tasks:
+  - name: worker count
+    set_fact:
+      ip_count: "{{ griups.all | map('extract', hostvars, ['ansible_host'])}}"
+
+  - debug:
+      msg: "{{ ip_count }}"
+
+  # - name: Create join node command
+  #   shell: /snap/bin/microk8s add-node
+  #   register: join_token
+  #   ignore_errors: true
+
+  # - set_fact:
+  #     microk8s_join: "{{ join_token.stdout_lines[4] }}"
+
   - name: Update web servers
     with_items: "{{ numbers }}"
     set_fact:
