@@ -8,34 +8,26 @@
   tasks:
   - name: worker count
     set_fact:
-      ip_count: "{{ groups.all | unique | length }}"
+      ip_count: "{{ groups["workers"] | unique | length }}"
 
   - debug:
       msg: "{{ ip_count }}"
 
-  - name: Create join node command
-    shell: /snap/bin/microk8s add-node
-    register: join_token
-    ignore_errors: true
-    loop: "{{ range(1, num_iterations|int + 1 ) | list }}"
-    vars:
-      num_iterations: "{{ ip_count }}"
+  # - name: Create join node command
+  #   shell: /snap/bin/microk8s add-node
+  #   register: join_token
+  #   ignore_errors: true
+  #   loop: "{{ range(1, num_iterations|int + 1 ) | list }}"
+  #   vars:
+  #     num_iterations: "{{ ip_count }}"
 
-  - set_fact:
-      "microk8s_join_{{ my_idx }}": "{{ join_token.results[my_idx].stdout_lines[4] }}"
-    loop: "{{ join_token.results }}"
-    loop_control:
-      index_var: my_idx
+  # - set_fact:
+  #     "microk8s_join_{{ my_idx }}": "{{ join_token.results[my_idx].stdout_lines[4] }}"
+  #   loop: "{{ join_token.results }}"
+  #   loop_control:
+  #     index_var: my_idx
 
-
-  - debug:
-      msg: "{{ microk8s_join_1 }} : {{ microk8s_join_2 }} : {{ microk8s_join_0 }}"
-
-  # - name: Update web servers
-  #   with_items: "{{ numbers }}"
-  #   set_fact:
-  #     "variable_{{ item }}": "{{ item }}"
 
   # - debug:
-  #     msg: "{variable_{{ item }}:{{ item }}}"
-  #   with_items: "{{ numbers }}"
+  #     msg: "{{ microk8s_join_1 }} : {{ microk8s_join_2 }} : {{ microk8s_join_0 }}"
+
