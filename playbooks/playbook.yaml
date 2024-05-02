@@ -12,5 +12,5 @@
       "variable_{{ item }}": "{{ item }}"
 
   - debug:
-      msg: "variable_{{ item }}"
+      msg: "{variable_{{ item }}:{{ item }}}"
     with_items: "{{ numbers }}"
