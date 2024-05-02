@@ -67,8 +67,8 @@
     loop: "{{ microk8s_join_list }}"
     loop_control:
       index_var: my_idx
-    debug:
-      msg: "{{ groups.workers[my_idx] }}"
+    # debug:
+    #   msg: "{{ groups.workers[my_idx] }}"
 
 
 
