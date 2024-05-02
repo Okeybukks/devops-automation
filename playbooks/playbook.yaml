@@ -13,4 +13,4 @@
 
   - debug:
       msg: "variable_{{ item }}"
-     with_items: "{{ numbers }}"
+    with_items: "{{ numbers }}"
