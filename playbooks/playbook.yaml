@@ -10,6 +10,10 @@
     loop: "{{ mylist }}"
     loop_control:
       index_var: my_idx
+    debug:
+      var: "variable{{ my_idx }}"
+
+    
     # - name: Create join node command
     #   shell: /snap/bin/microk8s add-node
     #   register: join_tokens
