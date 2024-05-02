@@ -29,7 +29,7 @@
 
 
   - debug:
-      msg: "{{ microk8s_join_1 }}"
+      msg: "{{ microk8s_join_1 }} : {{ microk8s_join_2 }} : {{ microk8s_join_3 }}"
 
   # - name: Update web servers
   #   with_items: "{{ numbers }}"
