@@ -26,7 +26,7 @@
 
 - hosts: "master"
   become: true
-  var:
+  vars:
     workers_count: "{{ groups.workers | length }}"
   tasks:   
 
