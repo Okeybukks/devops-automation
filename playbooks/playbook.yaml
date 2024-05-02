@@ -8,4 +8,5 @@
   tasks:
   - name: Update web servers
     with_items: "{{ numbers }}"
-    set_fact
+    set_fact:
+      "variable_{{ item }}": "{{ item }}"
