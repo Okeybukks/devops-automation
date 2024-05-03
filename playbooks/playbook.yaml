@@ -41,8 +41,8 @@
   - set_fact:
       microk8s_join_list: "{{ microk8s_join_list | default([]) + ['/snap/bin/' + item.stdout_lines[4]] }}"
     loop: "{{ join_token.results }}"
-    loop_control:
-      index_var: my_idx
+    # loop_control:
+    #   index_var: my_idx
 
   # - name: Add Cluster dashboard, Ingress and Cert Manager addon
   #   shell: /snap/bin/microk8s enable community ingress dashboard cert-manager 
@@ -58,15 +58,14 @@
   # - name: Save Kubernetes dashboard token
   #   set_fact:
   #     dashboard_token: "{{ dashboard_token.stdout }}"
-
+  
   - name: Run command on worker nodes
     shell: "{{ item }}"
-    delegate_to: "{{ item }}"
+    delegate_to: "{{ groups.workers[ansible_loop.index0] }}"
     loop: "{{ microk8s_join_list }}"
     loop_control:
       extended: true
-    # loop_control:
-    #   index_var: my_idx
+
     # debug:
     #   msg: "{{ groups.workers[ansible_loop.index0] }}"
 
