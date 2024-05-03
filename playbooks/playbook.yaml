@@ -66,6 +66,11 @@
     loop_control:
       extended: true
 
+  - name: Change alias for Kubectl command
+    shell: "echo 'alias kubectl=\"microk8s kubectl\"' >> ~/.bashrc"
+    args:
+      creates: "~/.bashrc"
+
 
 
 
