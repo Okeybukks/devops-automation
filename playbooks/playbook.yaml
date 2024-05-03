@@ -68,7 +68,7 @@
     # loop_control:
     #   index_var: my_idx
     debug:
-      msg: "{{ groups.workers[loop.index0] }}"
+      msg: "{{ groups.workers.loop.index0 }}"
 
 
 
