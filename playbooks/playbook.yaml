@@ -1,28 +1,28 @@
 ---
-- name: Ansible playbook to create Microk8s Cluster
-  hosts: kubenodes
-  become: true
+# - name: Ansible playbook to create Microk8s Cluster
+#   hosts: kubenodes
+#   become: true
 
-  tasks:
+#   tasks:
 
-  - name: Update web servers
-    apt:
-      upgrade: yes
-      update_cache: yes
+#   - name: Update web servers
+#     apt:
+#       upgrade: yes
+#       update_cache: yes
 
-  - name: Install snap package installer
-    apt:
-      name: snapd
-      state: present
+#   - name: Install snap package installer
+#     apt:
+#       name: snapd
+#       state: present
 
-  - name: Install Microk8s
-    snap:
-      name: microk8s
-      classic: true
+#   - name: Install Microk8s
+#     snap:
+#       name: microk8s
+#       classic: true
 
-  - name: Add current user to microk8s group
-    shell:
-      cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
+#   - name: Add current user to microk8s group
+#     shell:
+#       cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
 
 - hosts: "master"
   become: true
@@ -30,44 +30,44 @@
     workers_count: "{{ groups.workers | length }}"
   tasks:   
 
-  - name: Create join node command
-    shell: /snap/bin/microk8s add-node
-    register: join_token
-    ignore_errors: true
-    loop: "{{ range(1, num_iterations|int + 1 ) | list }}"
-    vars:
-      num_iterations: "{{ workers_count }}"
+  # - name: Create join node command
+  #   shell: /snap/bin/microk8s add-node
+  #   register: join_token
+  #   ignore_errors: true
+  #   loop: "{{ range(1, num_iterations|int + 1 ) | list }}"
+  #   vars:
+  #     num_iterations: "{{ workers_count }}"
 
-  - set_fact:
-      microk8s_join_list: "{{ microk8s_join_list | default([]) + ['/snap/bin/' + item.stdout_lines[4]] }}"
-    loop: "{{ join_token.results }}"
-    # loop_control:
-    #   index_var: my_idx
+  # - set_fact:
+  #     microk8s_join_list: "{{ microk8s_join_list | default([]) + ['/snap/bin/' + item.stdout_lines[4]] }}"
+  #   loop: "{{ join_token.results }}"
+  #   # loop_control:
+  #   #   index_var: my_idx
 
-  - name: Add Cluster dashboard, Ingress and Cert Manager addon
-    shell: /snap/bin/microk8s enable community ingress dashboard cert-manager 
+  # - name: Add Cluster dashboard, Ingress and Cert Manager addon
+  #   shell: /snap/bin/microk8s enable community ingress dashboard cert-manager 
 
-  - name: Add Argocd addon
-    shell: /snap/bin/microk8s enable argocd
+  # - name: Add Argocd addon
+  #   shell: /snap/bin/microk8s enable argocd
         
-  - name: Store dashboard token
-    shell: /snap/bin/microk8s kubectl create token default
-    register: dashboard_token
-    ignore_errors: true
+  # - name: Store dashboard token
+  #   shell: /snap/bin/microk8s kubectl create token default
+  #   register: dashboard_token
+  #   ignore_errors: true
 
-  - name: Save Kubernetes dashboard token
-    set_fact:
-      dashboard_token: "{{ dashboard_token.stdout }}"
+  # - name: Save Kubernetes dashboard token
+  #   set_fact:
+  #     dashboard_token: "{{ dashboard_token.stdout }}"
   
-  - name: Run command on worker nodes
-    shell: "{{ microk8s_join_list[ansible_loop.index0] }}"
-    delegate_to: "{{ item }}"
-    loop: "{{ groups.workers }}"
-    loop_control:
-      extended: true
+  # - name: Run command on worker nodes
+  #   shell: "{{ microk8s_join_list[ansible_loop.index0] }}"
+  #   delegate_to: "{{ item }}"
+  #   loop: "{{ groups.workers }}"
+  #   loop_control:
+  #     extended: true
 
   - name: Change alias for Kubectl command
-    shell: "echo 'alias kubectl=\"microk8s kubectl\"' >> ~/.bashrc"
+    shell: echo 'alias kubectl="microk8s kubectl"' >> ~/.bashrc
     args:
       creates: "~/.bashrc"
 
