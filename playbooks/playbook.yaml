@@ -1,28 +1,28 @@
 ---
-# - name: Ansible playbook to create Microk8s Cluster
-#   hosts: kubenodes
-#   become: true
+- name: Ansible playbook to create Microk8s Cluster
+  hosts: kubenodes
+  become: true
 
-#   tasks:
+  tasks:
 
-#   - name: Update web servers
-#     apt:
-#       upgrade: yes
-#       update_cache: yes
+  - name: Update web servers
+    apt:
+      upgrade: yes
+      update_cache: yes
 
-#   - name: Install snap package installer
-#     apt:
-#       name: snapd
-#       state: present
+  - name: Install snap package installer
+    apt:
+      name: snapd
+      state: present
 
-#   - name: Install Microk8s
-#     snap:
-#       name: microk8s
-#       classic: true
+  - name: Install Microk8s
+    snap:
+      name: microk8s
+      classic: true
 
-#   - name: Add current user to microk8s group
-#     shell:
-#       cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
+  - name: Add current user to microk8s group
+    shell:
+      cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
 
 - hosts: "master"
   become: true
@@ -44,20 +44,20 @@
     # loop_control:
     #   index_var: my_idx
 
-  # - name: Add Cluster dashboard, Ingress and Cert Manager addon
-  #   shell: /snap/bin/microk8s enable community ingress dashboard cert-manager 
+  - name: Add Cluster dashboard, Ingress and Cert Manager addon
+    shell: /snap/bin/microk8s enable community ingress dashboard cert-manager 
 
-  # - name: Add Argocd addon
-  #   shell: /snap/bin/microk8s enable argocd
+  - name: Add Argocd addon
+    shell: /snap/bin/microk8s enable argocd
         
-  # - name: Store dashboard token
-  #   shell: /snap/bin/microk8s kubectl create token default
-  #   register: dashboard_token
-  #   ignore_errors: true
+  - name: Store dashboard token
+    shell: /snap/bin/microk8s kubectl create token default
+    register: dashboard_token
+    ignore_errors: true
 
-  # - name: Save Kubernetes dashboard token
-  #   set_fact:
-  #     dashboard_token: "{{ dashboard_token.stdout }}"
+  - name: Save Kubernetes dashboard token
+    set_fact:
+      dashboard_token: "{{ dashboard_token.stdout }}"
   
   - name: Run command on worker nodes
     shell: "{{ microk8s_join_list[ansible_loop.index0] }}"
@@ -65,16 +65,6 @@
     loop: "{{ groups.workers }}"
     loop_control:
       extended: true
-
-  # - name: Run command on worker nodes
-  #   shell: "{{ item }}"
-  #   delegate_to: "{{ groups.workers[ansible_loop.index0] }}"
-  #   loop: "{{ microk8s_join_list }}"
-  #   loop_control:
-  #     extended: true
-
-    # debug:
-    #   msg: "{{ groups.workers[ansible_loop.index0] }}"
 
 
 
