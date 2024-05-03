@@ -67,9 +67,18 @@
   #     extended: true
 
   - name: Change alias for Kubectl command
-    shell: echo 'alias kubectl="microk8s kubectl"' >> ~/.bashrc
+    lineinfile:
+      path: "~/.bashrc"
+      line: "alias kubectl='microk8s kubectl'"
+      create: yes
+      state: present
+      insertafter: EOF
+
+  - name: Source .bashrc
+    shell: "source ~/.bashrc"
     args:
-      creates: "~/.bashrc"
+      executable: /bin/bash
+  
 
 
 
