@@ -60,11 +60,11 @@
   #     dashboard_token: "{{ dashboard_token.stdout }}"
   
   - name: Run command on worker nodes
-    shell: echo "Hello world"
+    shell: "{{ microk8s_join_list[ansible_loop.index0] }}"
     delegate_to: "{{ item }}"
     loop: "{{ groups.workers }}"
-    # loop_control:
-    #   extended: true
+    loop_control:
+      extended: true
 
   # - name: Run command on worker nodes
   #   shell: "{{ item }}"
