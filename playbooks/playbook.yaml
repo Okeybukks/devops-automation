@@ -15,14 +15,14 @@
 #       name: snapd
 #       state: present
 
-  # - name: Install Microk8s
-  #   snap:
-  #     name: microk8s
-  #     classic: true
+#   - name: Install Microk8s
+#     snap:
+#       name: microk8s
+#       classic: true
 
-  # - name: Add current user to microk8s group
-  #   shell:
-  #     cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
+#   - name: Add current user to microk8s group
+#     shell:
+#       cmd: "sudo usermod -a -G microk8s {{ ansible_user }}"
 
 - hosts: "master"
   become: true
@@ -60,11 +60,18 @@
   #     dashboard_token: "{{ dashboard_token.stdout }}"
   
   - name: Run command on worker nodes
-    shell: "{{ item }}"
-    delegate_to: "{{ groups.workers[ansible_loop.index0] }}"
-    loop: "{{ microk8s_join_list }}"
-    loop_control:
-      extended: true
+    shell: echo "Hello world"
+    delegate_to: "{{ item }}"
+    loop: "{{ groups.workers }}"
+    # loop_control:
+    #   extended: true
+
+  # - name: Run command on worker nodes
+  #   shell: "{{ item }}"
+  #   delegate_to: "{{ groups.workers[ansible_loop.index0] }}"
+  #   loop: "{{ microk8s_join_list }}"
+  #   loop_control:
+  #     extended: true
 
     # debug:
     #   msg: "{{ groups.workers[ansible_loop.index0] }}"
