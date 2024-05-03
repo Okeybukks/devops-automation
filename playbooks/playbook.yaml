@@ -58,10 +58,6 @@
   # - name: Save Kubernetes dashboard token
   #   set_fact:
   #     dashboard_token: "{{ dashboard_token.stdout }}"
-  - name: "Add K8S join command to a dummy host"
-    add_host:
-      name: "K8S_JOIN_HOLDER"
-      command: "{{ '/snap/bin/' + microk8s_join }}"
 
   - name: Run command on worker nodes
     shell: "{{ item }}"
